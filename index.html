@@ -2,10 +2,20 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>JSON表示例</title>
 </head>
 <body>
-  <p>Hello</p>
+  <div id="output"></div>
+
+  <script>
+    fetch('data.json')
+      .then(response => response.json())
+      .then(data => {
+        document.getElementById('output').textContent = JSON.stringify(data, null, 2);
+      })
+      .catch(error => {
+        console.error('読み込みエラー:', error);
+      });
+  </script>
 </body>
 </html>
