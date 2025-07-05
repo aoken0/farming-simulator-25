@@ -58,9 +58,6 @@ const Header = styled.header`
 const ContentWrapper = styled.div`
   width: 100%;
   margin: 0 auto;
-  // background-color: #fff;
-  // box-shadow: 0 0 2px 2px #ddd;
-  // padding: 1em;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -71,7 +68,7 @@ const SideCotent = styled.nav`
   width: 25%;
   min-width: 180px;
   background-color: white;
-  box-shadow: 0 0 2px 1px #ddd;
+  box-shadow: 0 0 4px 1px #ddd;
   h4 {
     padding: 0 0.5em;
     font-size: 0.6em;
@@ -88,6 +85,7 @@ const SideCotent = styled.nav`
 `
 const MainContent = styled.div`
   width: 75%;
+  padding: 0.4em;
   background-color: white;
-  box-shadow: 0 0 2px 1px #ddd;
+  box-shadow: 0 0 4px 1px #ddd;
 `

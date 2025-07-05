@@ -668,7 +668,7 @@
     "reading": "いた",
     "maxPrice": 4290,
     "minPrice": 3432,
-    "maxMonths": [],
+    "maxMonths": [7],
     "type": "others"
   },
   {
