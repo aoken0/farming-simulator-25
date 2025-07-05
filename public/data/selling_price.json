@@ -10,11 +10,6 @@
     "maxPrice": 415,
     "minPrice": 372,
     "maxMonths": [8]
-  },
-  {
-    "name": "",
-    "maxPrice": ,
-    "minPrice": ,
-    "maxMonths": []
-  },
+  }
+  
 ]
