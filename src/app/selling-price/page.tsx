@@ -9,6 +9,9 @@ import GlobalWrapper from "@/components/GlobalWrapper"
 import ContentTitle from "@/components/ContentTitle";
 import ContentParagraph from "@/components/ContentParagraph";
 import ContentUL from "@/components/ContentUL";
+import MenuTable from "@/components/MenuTable";
+import MenuTableTr from "@/components/MenuTableTr";
+import MenuTableTrSelect from "@/components/MenuTableTrSelect";
 
 const SellingPrice = () => {
   const [sellingPrices, setSellingPrices] = useState<Item[]>([]);
@@ -64,19 +67,15 @@ const SellingPrice = () => {
         </ContentUL>
       </ContentParagraph>
       <MenuTable>
-        <tbody>
-          <tr>
-            <th>難易度</th>
-            <td>
-              <select name="difficulty" id="difficulty" defaultValue={"normal"} onChange={(e) => handleChangeDifficulty(e.target.value)}>
-                <option value="easy">イージー</option>
-                <option value="normal">ノーマル</option>
-                <option value="hard">ハード</option>
-              </select>
-            </td>
-          </tr>
-        </tbody>
+        <MenuTableTr $label="難易度">
+          <MenuTableTrSelect $name="difficulty" $defaultValue="normal" $onChange={(e) => handleChangeDifficulty(e.target.value)}>
+            <option value="easy">イージー</option>
+            <option value="normal">ノーマル</option>
+            <option value="hard">ハード</option>
+          </MenuTableTrSelect>
+        </MenuTableTr>
       </MenuTable>
+      <small style={{fontSize: "max(0.3em, 10px)"}}>※ 項目名クリックでソート</small>
       <Table>
       <tbody>
         <TableHeader>
@@ -100,42 +99,6 @@ const SellingPrice = () => {
 }
 
 export default SellingPrice
-
-const MenuTable = styled.table`
-  width: 100%;
-  margin: 0 auto;
-  border: 1px solid #999;
-  border-collapse:separate;
-  border-spacing: 0;
-  margin-bottom: 1em;
-  tr {
-    line-height: 1.2em;
-  }
-  th, td {
-    font-size: 0.5em;
-  }
-  th {
-    width: 8em;
-    padding-left: 1em;
-    background-color: #f0f0f0;
-  }
-  td {
-    position: relative;
-    select {
-      width: 100%;
-      padding-left: 1em;
-      box-shadow: 0 0 4px 2px #ddd inset;
-    }
-    &::after {
-      content: "▼";
-      position: absolute;
-      top: 50%;
-      right: 1em;
-      transform: translateY(-50%);
-      pointer-events: none;
-    }
-  }
-`
 
 const Table = styled.table`
   width: 100%;
