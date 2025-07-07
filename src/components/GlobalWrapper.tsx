@@ -8,12 +8,15 @@ const GlobalWrapper: React.FC<Props> = ({children}) => {
   return (
     <Wrapper>
       <Header>
-        <h1><a href="">Farming Simulator 25 wiki</a></h1>
+        <h1><a href="./">Farming Simulator 25 wiki</a></h1>
       </Header>
       <ContentWrapper>
         <SideCotent>
+          <h4>シミュレーター</h4>
+          <p><a href="/production-planner">生産計画ツール</a></p>
+          <p><a href="/reverse-production">材料逆引きツール</a></p>
           <h4>価格</h4>
-          <p>売値</p>
+          <p><a href="/selling-price">売値</a></p>
         </SideCotent>
         <MainContent>
           {children}
@@ -76,11 +79,13 @@ const SideCotent = styled.nav`
     line-height: 2em;
     color: white;
     background-color:rgb(0, 109, 24);
+    cursor: default;
   }
   p {
     padding: 0 0.5em;
     font-size: 0.5em;
     line-height: 2em;
+    cursor: pointer;
   }
 `
 const MainContent = styled.div`
