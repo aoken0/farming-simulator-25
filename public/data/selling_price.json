@@ -1,15 +1,834 @@
 [
   {
     "name": "さやいんげん",
+    "reading": "さやいんげん",
     "maxPrice": 2241,
     "minPrice": 2031,
-    "maxMonths": [8]
+    "maxMonths": [8],
+    "type": "produce"
   },
   {
     "name": "ほうれん草",
-    "maxPrice": 415,
-    "minPrice": 372,
-    "maxMonths": [8]
+    "reading": "ほうれんそう",
+    "maxPrice": 693,
+    "minPrice": 621,
+    "maxMonths": [8],
+    "type": "produce"
+  },
+  {
+    "name": "わら",
+    "reading": "わら",
+    "maxPrice": 150,
+    "minPrice": 102,
+    "maxMonths": [1],
+    "type": "produce"
+  },
+  {
+    "name": "アメリカボウフウ",
+    "reading": "あめりかぼうふう",
+    "maxPrice": 453,
+    "minPrice": 354,
+    "maxMonths": [1],
+    "type": "produce"
+  },
+  {
+    "name": "エンドウ豆",
+    "reading": "えんどうまめ",
+    "maxPrice": 3432,
+    "minPrice": 2934,
+    "maxMonths": [12],
+    "type": "produce"
+  },
+  {
+    "name": "オリーブ",
+    "reading": "おりーぶ",
+    "maxPrice": 2172,
+    "minPrice": 1350,
+    "maxMonths": [6],
+    "type": "produce"
+  },
+  {
+    "name": "オーツ麦",
+    "reading": "おーつむぎ",
+    "maxPrice": 1932,
+    "minPrice": 1320,
+    "maxMonths": [1],
+    "type": "produce"
+  },
+  {
+    "name": "キャノーラ",
+    "reading": "きゃのーら",
+    "maxPrice": 2190,
+    "minPrice": 1464,
+    "maxMonths": [12],
+    "type": "produce"
+  },
+  {
+    "name": "サトウキビ",
+    "reading": "さとうきび",
+    "maxPrice": 375,
+    "minPrice": 336,
+    "maxMonths": [7],
+    "type": "produce"
+  },
+  {
+    "name": "ジャガイモ",
+    "reading": "じゃがいも",
+    "maxPrice": 765,
+    "minPrice": 600,
+    "maxMonths": [12],
+    "type": "produce"
+  },
+  {
+    "name": "テンサイ",
+    "reading": "てんさい",
+    "maxPrice": 594,
+    "minPrice": 465,
+    "maxMonths": [12],
+    "type": "produce"
+  },
+  {
+    "name": "トウモロコシ",
+    "reading": "とうもろこし",
+    "maxPrice": 1515,
+    "minPrice": 705,
+    "maxMonths": [1],
+    "type": "produce"
+  },
+  {
+    "name": "ニンジン",
+    "reading": "にんじん",
+    "maxPrice": 456,
+    "minPrice": 357,
+    "maxMonths": [1],
+    "type": "produce"
+  },
+  {
+    "name": "ヒマワリ",
+    "reading": "ひまわり",
+    "maxPrice": 2424,
+    "minPrice": 1311,
+    "maxMonths": [3],
+    "type": "produce"
+  },
+  {
+    "name": "ブドウ",
+    "reading": "ぶどう",
+    "maxPrice": 2172,
+    "minPrice": 1434,
+    "maxMonths": [5],
+    "type": "produce"
+  },
+  {
+    "name": "モロコシ",
+    "reading": "もろこし",
+    "maxPrice": 1575,
+    "minPrice": 1020,
+    "maxMonths": [1],
+    "type": "produce"
+  },
+  {
+    "name": "レッドビート",
+    "reading": "れっどびーと",
+    "maxPrice": 420,
+    "minPrice": 330,
+    "maxMonths": [1],
+    "type": "produce"
+  },
+  {
+    "name": "大豆",
+    "reading": "だいず",
+    "maxPrice": 3711,
+    "minPrice": 1494,
+    "maxMonths": [7],
+    "type": "produce"
+  },
+  {
+    "name": "大麦",
+    "reading": "おおむぎ",
+    "maxPrice": 1137,
+    "minPrice": 771,
+    "maxMonths": [1],
+    "type": "produce"
+  },
+  {
+    "name": "小麦",
+    "reading": "こむぎ",
+    "maxPrice": 1224,
+    "minPrice": 831,
+    "maxMonths": [1],
+    "type": "produce"
+  },
+  {
+    "name": "米",
+    "reading": "こめ",
+    "maxPrice": 3465,
+    "minPrice": 3102,
+    "maxMonths": [7],
+    "type": "produce"
+  },
+  {
+    "name": "綿",
+    "reading": "わた",
+    "maxPrice": 4170,
+    "minPrice": 3252,
+    "maxMonths": [3],
+    "type": "produce"
+  },
+  {
+    "name": "草",
+    "reading": "くさ",
+    "maxPrice": 150,
+    "minPrice": 123,
+    "maxMonths": [1,2],
+    "type": "produce"
+  },
+  {
+    "name": "長粒米",
+    "reading": "ちょうりゅうまい",
+    "maxPrice": 1668,
+    "minPrice": 1494,
+    "maxMonths": [7],
+    "type": "produce"
+  },
+  {
+    "name": "さやいんげんの瓶詰",
+    "reading": "さやいんげんのびんづめ",
+    "maxPrice": 5658,
+    "minPrice": 5598,
+    "maxMonths": [3,4,5,6,7,12,1,2],
+    "type": "others"
+  },
+  {
+    "name": "ほうれん草の袋",
+    "reading": "ほうれんそうのふくろ",
+    "maxPrice": 2337,
+    "minPrice": 2325,
+    "maxMonths": [9],
+    "type": "others"
+  },
+  {
+    "name": "アメリカボウフウ・スープ",
+    "reading": "あめりかぼうふうすーぷ",
+    "maxPrice": 2640,
+    "minPrice": 2613,
+    "maxMonths": [3,4,5,6,7,12,1,2],
+    "type": "others"
+  },
+  {
+    "name": "イチゴ",
+    "reading": "いちご",
+    "maxPrice": 1524,
+    "minPrice": 1224,
+    "maxMonths": [2],
+    "type": "others"
+  },
+  {
+    "name": "ウッドチップ",
+    "reading": "うっどちっぷ",
+    "maxPrice": 1623,
+    "minPrice": 510,
+    "maxMonths": [1],
+    "type": "others"
+  },
+  {
+    "name": "ウール",
+    "reading": "うーる",
+    "maxPrice": 3639,
+    "minPrice": 2199,
+    "maxMonths": [5],
+    "type": "others"
+  },
+  {
+    "name": "エノキ",
+    "reading": "えのき",
+    "maxPrice": 1425,
+    "minPrice": 1140,
+    "maxMonths": [2],
+    "type": "others"
+  },
+  {
+    "name": "エンドウ豆の缶詰",
+    "reading": "えんどうまめのかんづめ",
+    "maxPrice": 7788,
+    "minPrice": 7746,
+    "maxMonths": [3,4,5,6,7,12,1,2],
+    "type": "others"
+  },
+  {
+    "name": "オリーブオイル",
+    "reading": "おりーぶおいる",
+    "maxPrice": 8784,
+    "minPrice": 5632,
+    "maxMonths": [6],
+    "type": "others"
+  },
+  {
+    "name": "キムチ",
+    "reading": "きむち",
+    "maxPrice": 1950,
+    "minPrice": 1896,
+    "maxMonths": [3,4,5,6,7,12,1,2],
+    "type": "others"
+  },
+  {
+    "name": "キャノーラ油",
+    "reading": "きゃのーらあぶら",
+    "maxPrice": 5952,
+    "minPrice": 3984,
+    "maxMonths": [12],
+    "type": "others"
+  },
+  {
+    "name": "ケーキ",
+    "reading": "けーき",
+    "maxPrice": 10692,
+    "minPrice": 8910,
+    "maxMonths": [1],
+    "type": "others"
+  },
+  {
+    "name": "サイレージ",
+    "reading": "さいれーじ",
+    "maxPrice": 363,
+    "minPrice": 360,
+    "maxMonths": [3,4,5,6,7,12,1,2],
+    "type": "others"
+  },
+  {
+    "name": "シリアル",
+    "reading": "しりある",
+    "maxPrice": 12768,
+    "minPrice": 10716,
+    "maxMonths": [3],
+    "type": "others"
+  },
+  {
+    "name": "ジャガイモ・スープ",
+    "reading": "じゃがいもすーぷ",
+    "maxPrice": 3753,
+    "minPrice": 3702,
+    "maxMonths": [3,4,5,6,7,12,1,2],
+    "type": "others"
+  },
+  {
+    "name": "スラリー",
+    "reading": "すらりー",
+    "maxPrice": 111,
+    "minPrice": 87,
+    "maxMonths": [1,2],
+    "type": "others"
+  },
+  {
+    "name": "セメントレンガ",
+    "reading": "せめんとれんが",
+    "maxPrice": 4893,
+    "minPrice": 4740,
+    "maxMonths": [9,10],
+    "type": "others"
+  },
+  {
+    "name": "セメント袋",
+    "reading": "せめんとぶくろ",
+    "maxPrice": 3166,
+    "minPrice": 3150,
+    "maxMonths": [11],
+    "type": "others"
+  },
+  {
+    "name": "チョコレート",
+    "reading": "ちょこれーと",
+    "maxPrice": 6480,
+    "minPrice": 5640,
+    "maxMonths": [6],
+    "type": "others"
+  },
+  {
+    "name": "チリペッパー",
+    "reading": "ちりぺっぱー",
+    "maxPrice": 1524,
+    "minPrice": 1230,
+    "maxMonths": [2],
+    "type": "others"
+  },
+  {
+    "name": "チーズ",
+    "reading": "ちーず",
+    "maxPrice": 5832,
+    "minPrice": 4860,
+    "maxMonths": [1],
+    "type": "others"
+  },
+  {
+    "name": "テンサイ切り出し",
+    "reading": "テンサイきりだし",
+    "maxPrice": 765,
+    "minPrice": 600,
+    "maxMonths": [12],
+    "type": "others"
+  },
+  {
+    "name": "トマト",
+    "reading": "とまと",
+    "maxPrice": 1695,
+    "minPrice": 1356,
+    "maxMonths": [2],
+    "type": "others"
+  },
+  {
+    "name": "トリプル・スープ",
+    "reading": "とりぷるすーぷ",
+    "maxPrice": 2832,
+    "minPrice": 2820,
+    "maxMonths": [11],
+    "type": "others"
+  },
+  {
+    "name": "ニンジン・スープ",
+    "reading": "にんじんすーぷ",
+    "maxPrice": 2655,
+    "minPrice": 2642,
+    "maxMonths": [3,4,5,6,7,12,1,2],
+    "type": "others"
+  },
+  {
+    "name": "ニンニク",
+    "reading": "にんにく",
+    "maxPrice": 1524,
+    "minPrice": 1224,
+    "maxMonths": [2],
+    "type": "others"
+  },
+  {
+    "name": "ヌードルスープ",
+    "reading": "ぬーどるすーぷ",
+    "maxPrice": 4704,
+    "minPrice": 4650,
+    "maxMonths": [9,10,11],
+    "type": "others"
+  },
+  {
+    "name": "ネギ",
+    "reading": "ねぎ",
+    "maxPrice": 1524,
+    "minPrice": 1233,
+    "maxMonths": [2],
+    "type": "others"
+  },
+  {
+    "name": "ハチミツ",
+    "reading": "はちみつ",
+    "maxPrice": 3360,
+    "minPrice": 2781,
+    "maxMonths": [3],
+    "type": "others"
+  },
+  {
+    "name": "バケツ",
+    "reading": "ばけつ",
+    "maxPrice": 3870,
+    "minPrice": 3812,
+    "maxMonths": [3,4,5,6,7,12,1,2],
+    "type": "others"
+  },
+  {
+    "name": "バスタブ",
+    "reading": "ばすたぶ",
+    "maxPrice": 5130,
+    "minPrice": 5045,
+    "maxMonths": [3,4,5,6,7,12,1,2],
+    "type": "others"
+  },
+  {
+    "name": "バター",
+    "reading": "ばたー",
+    "maxPrice": 3630,
+    "minPrice": 3024,
+    "maxMonths": [1],
+    "type": "others"
+  },
+  {
+    "name": "パン",
+    "reading": "ぱん",
+    "maxPrice": 5991,
+    "minPrice": 4095,
+    "maxMonths": [1],
+    "type": "others"
+  },
+  {
+    "name": "ヒマワリ油",
+    "reading": "ひまわりあぶら",
+    "maxPrice": 6408,
+    "minPrice": 3471,
+    "maxMonths": [3],
+    "type": "others"
+  },
+  {
+    "name": "ヒラタケ",
+    "reading": "ひらたけ",
+    "maxPrice": 2931,
+    "minPrice": 2310,
+    "maxMonths": [2],
+    "type": "others"
+  },
+  {
+    "name": "ブドウジュース",
+    "reading": "ぶどうじゅーす",
+    "maxPrice": 5544,
+    "minPrice": 4653,
+    "maxMonths": [2],
+    "type": "others"
+  },
+  {
+    "name": "プレハブ壁",
+    "reading": "ぷれはぶかべ",
+    "maxPrice": 15549,
+    "minPrice": 14850,
+    "maxMonths": [9],
+    "type": "others"
+  },
+  {
+    "name": "ペーパーロール",
+    "reading": "ぺーぱーろーる",
+    "maxPrice": 9600,
+    "minPrice": 9429,
+    "maxMonths": [3,4,5,6,7,12,1,2],
+    "type": "others"
+  },
+  {
+    "name": "ボール紙ロール",
+    "reading": "ぼーるがみろーる",
+    "maxPrice": 8700,
+    "minPrice": 8576,
+    "maxMonths": [3,4,5,6,7,12,1,2],
+    "type": "others"
+  },
+  {
+    "name": "ポテトチップス",
+    "reading": "ぽてとちっぷす",
+    "maxPrice": 4500,
+    "minPrice": 4457,
+    "maxMonths": [3,4,5,6,7,12,1,2],
+    "type": "others"
+  },
+  {
+    "name": "ヤギのチーズ",
+    "reading": "やぎのちーず",
+    "maxPrice": 5703,
+    "minPrice": 4752,
+    "maxMonths": [1],
+    "type": "others"
+  },
+  {
+    "name": "ヤギ乳",
+    "reading": "やぎちち",
+    "maxPrice": 9168,
+    "minPrice": 7614,
+    "maxMonths": [9],
+    "type": "others"
+  },
+  {
+    "name": "ヤギ乳（瓶詰）",
+    "reading": "やぎちちびんづめ",
+    "maxPrice": 6837,
+    "minPrice": 5697,
+    "maxMonths": [1],
+    "type": "others"
+  },
+  {
+    "name": "ライスロール",
+    "reading": "らいすろーる",
+    "maxPrice": 4674,
+    "minPrice": 4650,
+    "maxMonths": [9,10,11],
+    "type": "others"
+  },
+  {
+    "name": "レタス",
+    "reading": "れたす",
+    "maxPrice": 3357,
+    "minPrice": 2691,
+    "maxMonths": [2],
+    "type": "others"
+  },
+  {
+    "name": "レッドビート・スープ",
+    "reading": "れっどびーとすーぷ",
+    "maxPrice": 2535,
+    "minPrice": 2529,
+    "maxMonths": [3,4,5,6,7,12,1,2],
+    "type": "others"
+  },
+  {
+    "name": "レーズン",
+    "reading": "れーずん",
+    "maxPrice": 5436,
+    "minPrice": 4449,
+    "maxMonths": [9],
+    "type": "others"
+  },
+  {
+    "name": "ロープ",
+    "reading": "ろーぷ",
+    "maxPrice": 16023,
+    "minPrice": 15150,
+    "maxMonths": [11],
+    "type": "others"
+  },
+  {
+    "name": "保存食料のアメリカボウフウ",
+    "reading": "ほぞんしょくりょうのあめりがぼうふう",
+    "maxPrice": 1734,
+    "minPrice": 1709,
+    "maxMonths": [3,4,5,6,7,12,1,2],
+    "type": "others"
+  },
+  {
+    "name": "保存食料のニンジン",
+    "reading": "ほぞんしょくりょうのにんじん",
+    "maxPrice": 1740,
+    "minPrice": 1740,
+    "maxMonths": [3,4,5,6,7,8,9,10,11,12,1,2],
+    "type": "others"
+  },
+  {
+    "name": "保存食料のビートルート",
+    "reading": "ほぞんしょくりょうのびーとるーと",
+    "maxPrice": 1680,
+    "minPrice": 1646,
+    "maxMonths": [3,4,5,6,7,12,1,2],
+    "type": "others"
+  },
+  {
+    "name": "卵",
+    "reading": "たまご",
+    "maxPrice": 4286,
+    "minPrice": 2385,
+    "maxMonths": [11],
+    "type": "others"
+  },
+  {
+    "name": "堆肥",
+    "reading": "たいひ",
+    "maxPrice": 111,
+    "minPrice": 87,
+    "maxMonths": [1,2],
+    "type": "others"
+  },
+  {
+    "name": "完全混合飼料",
+    "reading": "かんぜんこんごうしりょう",
+    "maxPrice": 372,
+    "minPrice": 363,
+    "maxMonths": [3,4,5,6,7,12,1,2],
+    "type": "others"
+  },
+  {
+    "name": "家具",
+    "reading": "かぐ",
+    "maxPrice": 6435,
+    "minPrice": 5148,
+    "maxMonths": [7],
+    "type": "others"
+  },
+  {
+    "name": "屋根板",
+    "reading": "やねいた",
+    "maxPrice": 4887,
+    "minPrice": 4740,
+    "maxMonths": [10],
+    "type": "others"
+  },
+  {
+    "name": "干し草",
+    "reading": "ほしくさ",
+    "maxPrice": 186,
+    "minPrice": 150,
+    "maxMonths": [1,2],
+    "type": "others"
+  },
+  {
+    "name": "木材",
+    "reading": "もくざい",
+    "maxPrice": 3000,
+    "minPrice": 2835,
+    "maxMonths": [3,4,5,6,7,12,1,2],
+    "type": "others"
+  },
+  {
+    "name": "木製の梁",
+    "reading": "もくせいのはり",
+    "maxPrice": 8775,
+    "minPrice": 8736,
+    "maxMonths": [11],
+    "type": "others"
+  },
+  {
+    "name": "板",
+    "reading": "いた",
+    "maxPrice": 4290,
+    "minPrice": 3432,
+    "maxMonths": [7],
+    "type": "others"
+  },
+  {
+    "name": "樽",
+    "reading": "たる",
+    "maxPrice": 5355,
+    "minPrice": 5340,
+    "maxMonths": [9,10],
+    "type": "others"
+  },
+  {
+    "name": "水牛のミルク",
+    "reading": "すいぎゅうのみるく",
+    "maxPrice": 11340,
+    "minPrice": 9450,
+    "maxMonths": [1],
+    "type": "others"
+  },
+  {
+    "name": "水牛のミルク（瓶詰）",
+    "reading": "すいぎゅうのみるくびんづめ",
+    "maxPrice": 8067,
+    "minPrice": 6723,
+    "maxMonths": [1],
+    "type": "others"
+  },
+  {
+    "name": "水牛のモッツァレラチーズ",
+    "reading": "すいぎゅうのもっつぁれらちーず",
+    "maxPrice": 24300,
+    "minPrice": 20250,
+    "maxMonths": [1],
+    "type": "others"
+  },
+  {
+    "name": "牛乳",
+    "reading": "ぎゅうにゅう",
+    "maxPrice": 2268,
+    "minPrice": 1890,
+    "maxMonths": [1],
+    "type": "others"
+  },
+  {
+    "name": "牛乳（瓶詰）",
+    "reading": "ぎゅうにゅうびんづめ",
+    "maxPrice": 1878,
+    "minPrice": 1566,
+    "maxMonths": [1],
+    "type": "others"
+  },
+  {
+    "name": "生地",
+    "reading": "きじ",
+    "maxPrice": 15480,
+    "minPrice": 9771,
+    "maxMonths": [5],
+    "type": "others"
+  },
+  {
+    "name": "発酵残渣",
+    "reading": "はっこうざんさ",
+    "maxPrice": 111,
+    "minPrice": 87,
+    "maxMonths": [1,2],
+    "type": "others"
+  },
+  {
+    "name": "白菜",
+    "reading": "はくさい",
+    "maxPrice": 1185,
+    "minPrice": 954,
+    "maxMonths": [2],
+    "type": "others"
+  },
+  {
+    "name": "石",
+    "reading": "いし",
+    "maxPrice": 150,
+    "minPrice": 144,
+    "maxMonths": [3,4,5,6,7,12,1,2],
+    "type": "others"
+  },
+  {
+    "name": "砂糖",
+    "reading": "さとう",
+    "maxPrice": 1575,
+    "minPrice": 1410,
+    "maxMonths": [7],
+    "type": "others"
+  },
+  {
+    "name": "種",
+    "reading": "たね",
+    "maxPrice": 3267,
+    "minPrice": 915,
+    "maxMonths": [1],
+    "type": "others"
+  },
+  {
+    "name": "稲の苗",
+    "reading": "いねのなえ",
+    "maxPrice": 9990,
+    "minPrice": 9970,
+    "maxMonths": [3,4,5,6,7,8,12,1,2],
+    "type": "others"
+  },
+  {
+    "name": "穀粉",
+    "reading": "こくふん",
+    "maxPrice": 2505,
+    "minPrice": 1710,
+    "maxMonths": [1],
+    "type": "others"
+  },
+  {
+    "name": "米油",
+    "reading": "こめあぶら",
+    "maxPrice": 6408,
+    "minPrice": 4040,
+    "maxMonths": [6],
+    "type": "others"
+  },
+  {
+    "name": "米箱",
+    "reading": "こめばこ",
+    "maxPrice": 8190,
+    "minPrice": 8190,
+    "maxMonths": [3,4,5,6,7,8,9,10,11,12,1,2],
+    "type": "others"
+  },
+  {
+    "name": "米粉",
+    "reading": "こめこ",
+    "maxPrice": 3303,
+    "minPrice": 2256,
+    "maxMonths": [1],
+    "type": "others"
+  },
+  {
+    "name": "米袋",
+    "reading": "こめぶくろ",
+    "maxPrice": 4392,
+    "minPrice": 4347,
+    "maxMonths": [3,4,5,6,7,12,1,2],
+    "type": "others"
+  },
+  {
+    "name": "衣服",
+    "reading": "いふく",
+    "maxPrice": 32895,
+    "minPrice": 19824,
+    "maxMonths": [5],
+    "type": "others"
+  },
+  {
+    "name": "長い板",
+    "reading": "ながいいた",
+    "maxPrice": 5871,
+    "minPrice": 5823,
+    "maxMonths": [9,10],
+    "type": "others"
   }
-  
 ]

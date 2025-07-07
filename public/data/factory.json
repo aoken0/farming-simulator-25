@@ -1,0 +1,861 @@
+{
+  "パン屋（大）": {
+    "price": 150000,
+    "storage": {
+      "イチゴ": 5000,
+      "バター": 5000,
+      "卵": 5000,
+      "牛乳（瓶詰）": 5000,
+      "砂糖": 5000,
+      "穀粉": 110000,
+      "米粉": 82000,
+      "ケーキ": 10000,
+      "パン": 55000
+    },
+    "products": {
+      "ケーキ（穀粉）": {
+        "input": {
+          "穀粉": 8,
+          "砂糖": 8,
+          "牛乳（瓶詰）": 8,
+          "卵": 8,
+          "バター": 8,
+          "イチゴ": 8
+        },
+        "output": {
+          "ケーキ": 21
+        },
+        "cyclePerMonth": 48,
+        "costPerMonth": 60
+      },
+      "ケーキ（米粉）": {
+        "input": {
+          "米粉": 6,
+          "砂糖": 8,
+          "牛乳（瓶詰）": 8,
+          "卵": 8,
+          "バター": 8,
+          "イチゴ": 8
+        },
+        "output": {
+          "ケーキ": 21
+        },
+        "cyclePerMonth": 48,
+        "costPerMonth": 60
+      },
+      "パン（穀粉）": {
+        "input": {
+          "穀粉": 90
+        },
+        "output": {
+          "パン": 45
+        },
+        "cyclePerMonth": 120,
+        "costPerMonth": 60
+      },
+      "パン（米粉）": {
+        "input": {
+          "米粉": 68
+        },
+        "output": {
+          "パン": 45
+        },
+        "cyclePerMonth": 48,
+        "costPerMonth": 72
+      }
+    }
+  },
+  "パン屋（小）": {
+    "price": 36000,
+    "storage": {
+      "イチゴ": 1500,
+      "バター": 1500,
+      "卵": 1500,
+      "牛乳（瓶詰）": 1500,
+      "砂糖": 1500,
+      "穀粉": 11000,
+      "米粉": 8200,
+      "ケーキ": 1500,
+      "パン": 5500
+    },
+    "products": {
+      "ケーキ（穀粉）": {
+        "input": {
+          "穀粉": 8,
+          "砂糖": 8,
+          "牛乳（瓶詰）": 8,
+          "卵": 8,
+          "バター": 8,
+          "イチゴ": 8
+        },
+        "output": {
+          "ケーキ": 21
+        },
+        "cyclePerMonth": 4.8,
+        "costPerMonth": 60
+      },
+      "ケーキ（米粉）": {
+        "input": {
+          "米粉": 6,
+          "砂糖": 8,
+          "牛乳（瓶詰）": 8,
+          "卵": 8,
+          "バター": 8,
+          "イチゴ": 8
+        },
+        "output": {
+          "ケーキ": 21
+        },
+        "cyclePerMonth": 4.8,
+        "costPerMonth": 60
+      },
+      "パン（穀粉）": {
+        "input": {
+          "穀粉": 9
+        },
+        "output": {
+          "パン": 4.5
+        },
+        "cyclePerMonth": 120,
+        "costPerMonth": 60
+      },
+      "パン（米粉）": {
+        "input": {
+          "米粉": 6.8
+        },
+        "output": {
+          "パン": 4.5
+        },
+        "cyclePerMonth": 48,
+        "costPerMonth": 72
+      }
+    }
+  },
+  "穀粉工場（大）": {
+    "price": 288000,
+    "storage": {
+      "オーツ麦": 180000,
+      "モロコシ": 180000,
+      "大麦": 144000,
+      "小麦": 126000,
+      "米": 65000,
+      "長粒米": 108000,
+      "穀粉": 60000,
+      "米粉": 60000
+    },
+    "products": {
+      "オーツ麦 穀粉": {
+        "input": {
+          "オーツ麦": 15
+        },
+        "output": {
+          "穀粉": 15
+        },
+        "cyclePerMonth": 1200,
+        "costPerMonth": 24
+      },
+      "モロコシ 穀粉": {
+        "input": {
+          "モロコシ": 15
+        },
+        "output": {
+          "穀粉": 13
+        },
+        "cyclePerMonth": 1200,
+        "costPerMonth": 24
+      },
+      "大麦 穀粉": {
+        "input": {
+          "大麦": 30
+        },
+        "output": {
+          "穀粉": 22
+        },
+        "cyclePerMonth": 480,
+        "costPerMonth": 24
+      },
+      "小麦 穀粉": {
+        "input": {
+          "小麦": 5
+        },
+        "output": {
+          "穀粉": 4
+        },
+        "cyclePerMonth": 2520,
+        "costPerMonth": 24
+      },
+      "米粉（米）": {
+        "input": {
+          "米": 9
+        },
+        "output": {
+          "米粉": 15
+        },
+        "cyclePerMonth": 720,
+        "costPerMonth": 24
+      },
+      "米粉（長粒米）": {
+        "input": {
+          "長粒米": 15
+        },
+        "output": {
+          "米粉": 13
+        },
+        "cyclePerMonth": 720,
+        "costPerMonth": 48
+      }
+    }
+  },
+  "穀粉工場（小）": {
+    "price": 36000,
+    "storage": {
+      "オーツ麦": 180000,
+      "モロコシ": 180000,
+      "大麦": 144000,
+      "小麦": 126000,
+      "米": 65000,
+      "長粒米": 108000,
+      "穀粉": 60000,
+      "米粉": 60000
+    },
+    "products": {
+      "オーツ麦 穀粉": {
+        "input": {
+          "オーツ麦": 15
+        },
+        "output": {
+          "穀粉": 15
+        },
+        "cyclePerMonth": 120,
+        "costPerMonth": 24
+      },
+      "モロコシ 穀粉": {
+        "input": {
+          "モロコシ": 15
+        },
+        "output": {
+          "穀粉": 13
+        },
+        "cyclePerMonth": 120,
+        "costPerMonth": 24
+      },
+      "大麦 穀粉": {
+        "input": {
+          "大麦": 30
+        },
+        "output": {
+          "穀粉": 22
+        },
+        "cyclePerMonth": 48,
+        "costPerMonth": 24
+      },
+      "小麦 穀粉": {
+        "input": {
+          "小麦": 5
+        },
+        "output": {
+          "穀粉": 4
+        },
+        "cyclePerMonth": 252,
+        "costPerMonth": 24
+      },
+      "米粉（米）": {
+        "input": {
+          "米": 9
+        },
+        "output": {
+          "米粉": 15
+        },
+        "cyclePerMonth": 72,
+        "costPerMonth": 24
+      },
+      "米粉（長粒米）": {
+        "input": {
+          "長粒米": 15
+        },
+        "output": {
+          "米粉": 13
+        },
+        "cyclePerMonth": 72,
+        "costPerMonth": 48
+      }
+    }
+  },
+  "砂糖工場（大）": {
+    "price": 240000,
+    "storage": {
+      "サトウキビ": 360000,
+      "テンサイ": 360000,
+      "テンサイ切り出し": 360000,
+      "砂糖": 180000
+    },
+    "products": {
+      "サトウキビ 砂糖": {
+        "input": {
+          "サトウキビ": 2
+        },
+        "output": {
+          "砂糖": 1
+        },
+        "cyclePerMonth": 8760,
+        "costPerMonth": 120
+      },
+      "テンサイ 砂糖": {
+        "input": {
+          "テンサイ": 2
+        },
+        "output": {
+          "砂糖": 1.05
+        },
+        "cyclePerMonth": 12720,
+        "costPerMonth": 120
+      },
+      "テンサイ切り出し 砂糖": {
+        "input": {
+          "テンサイ切り出し": 5
+        },
+        "output": {
+          "砂糖": 3
+        },
+        "cyclePerMonth": 5880,
+        "costPerMonth": 72
+      }
+    }
+  },
+  "砂糖工場（小）": {
+    "price": 36000,
+    "storage": {
+      "サトウキビ": 36000,
+      "テンサイ": 36000,
+      "テンサイ切り出し": 36000,
+      "砂糖": 18000
+    },
+    "products": {
+      "サトウキビ 砂糖": {
+        "input": {
+          "サトウキビ": 2
+        },
+        "output": {
+          "砂糖": 1
+        },
+        "cyclePerMonth": 876,
+        "costPerMonth": 120
+      },
+      "テンサイ 砂糖": {
+        "input": {
+          "テンサイ": 2
+        },
+        "output": {
+          "砂糖": 1.05
+        },
+        "cyclePerMonth": 1272,
+        "costPerMonth": 120
+      },
+      "テンサイ切り出し 砂糖": {
+        "input": {
+          "テンサイ切り出し": 5
+        },
+        "output": {
+          "砂糖": 3
+        },
+        "cyclePerMonth": 588,
+        "costPerMonth": 72
+      }
+    }
+  },
+  "乳業工場（大）": {
+    "price": 210000,
+    "storage": {
+      "ヤギ乳": 29000,
+      "水牛のミルク": 15000,
+      "牛乳": 72000,
+      "砂糖": 26000,
+      "チョコレート": 30000,
+      "チーズ": 40000,
+      "バター": 70000,
+      "ヤギのチーズ": 40000,
+      "ヤギ乳（瓶詰）": 30000,
+      "水牛のミルク（瓶詰）": 30000,
+      "水牛のモッツァレラチーズ": 10000,
+      "牛乳（瓶詰）": 96000
+    },
+    "products": {
+      "チョコレート": {
+        "input": {
+          "牛乳": 1,
+          "砂糖": 1
+        },
+        "output": {
+          "チョコレート": 1
+        },
+        "cyclePerMonth": 2520,
+        "costPerMonth": 24
+      },
+      "チーズ": {
+        "input": {
+          "牛乳": 3
+        },
+        "output": {
+          "チーズ": 2
+        },
+        "cyclePerMonth": 1320,
+        "costPerMonth": 24
+      },
+      "バター（ヤギ乳）": {
+        "input": {
+          "ヤギ乳": 3
+        },
+        "output": {
+          "バター": 10
+        },
+        "cyclePerMonth": 744,
+        "costPerMonth": 96
+      },
+      "バター（水牛のミルク）": {
+        "input": {
+          "水牛のミルク": 3
+        },
+        "output": {
+          "バター": 45
+        },
+        "cyclePerMonth": 52.8,
+        "costPerMonth": 192
+      },
+      "バター（牛乳）": {
+        "input": {
+          "牛乳": 15
+        },
+        "output": {
+          "バター": 13
+        },
+        "cyclePerMonth": 480,
+        "costPerMonth": 24
+      },
+      "ヤギのチーズ": {
+        "input": {
+          "ヤギ乳": 3
+        },
+        "output": {
+          "ヤギのチーズ": 6
+        },
+        "cyclePerMonth": 960,
+        "costPerMonth": 96
+      },
+      "ヤギ乳（瓶詰）": {
+        "input": {
+          "ヤギ乳": 10
+        },
+        "output": {
+          "ヤギ乳（瓶詰）": 20
+        },
+        "cyclePerMonth": 144,
+        "costPerMonth": 96
+      },
+      "水牛のミルク（瓶詰）": {
+        "input": {
+          "水牛のミルク": 10
+        },
+        "output": {
+          "水牛のミルク（瓶詰）": 20
+        },
+        "cyclePerMonth": 144,
+        "costPerMonth": 192
+      },
+      "水牛のモッツァレラチーズ": {
+        "input": {
+          "水牛のミルク": 3
+        },
+        "output": {
+          "水牛のモッツァレラチーズ": 2
+        },
+        "cyclePerMonth": 480,
+        "costPerMonth": 192
+      },
+      "牛乳（瓶詰）": {
+        "input": {
+          "牛乳": 10
+        },
+        "output": {
+          "牛乳（瓶詰）": 20
+        },
+        "cyclePerMonth": 480,
+        "costPerMonth": 24
+      }
+    }
+  },
+  "乳業工場（小）": {
+    "price": 36000,
+    "storage": {
+      "ヤギ乳": 3000,
+      "水牛のミルク": 2500,
+      "牛乳": 7200,
+      "砂糖": 2600,
+      "チョコレート": 3000,
+      "チーズ": 4000,
+      "バター": 7000,
+      "ヤギのチーズ": 4000,
+      "ヤギ乳（瓶詰）": 3000,
+      "水牛のミルク（瓶詰）": 3000,
+      "水牛のモッツァレラチーズ": 2000,
+      "牛乳（瓶詰）": 9600
+    },
+    "products": {
+      "チョコレート": {
+        "input": {
+          "牛乳": 1,
+          "砂糖": 1
+        },
+        "output": {
+          "チョコレート": 1
+        },
+        "cyclePerMonth": 252,
+        "costPerMonth": 24
+      },
+      "チーズ": {
+        "input": {
+          "牛乳": 3
+        },
+        "output": {
+          "チーズ": 2
+        },
+        "cyclePerMonth": 132,
+        "costPerMonth": 24
+      },
+      "バター（ヤギ乳）": {
+        "input": {
+          "ヤギ乳": 3
+        },
+        "output": {
+          "バター": 10
+        },
+        "cyclePerMonth": 74.4,
+        "costPerMonth": 96
+      },
+      "バター（水牛のミルク）": {
+        "input": {
+          "水牛のミルク": 3
+        },
+        "output": {
+          "バター": 45
+        },
+        "cyclePerMonth": 5.28,
+        "costPerMonth": 192
+      },
+      "バター（牛乳）": {
+        "input": {
+          "牛乳": 15
+        },
+        "output": {
+          "バター": 13
+        },
+        "cyclePerMonth": 48,
+        "costPerMonth": 24
+      },
+      "ヤギのチーズ": {
+        "input": {
+          "ヤギ乳": 3
+        },
+        "output": {
+          "ヤギのチーズ": 6
+        },
+        "cyclePerMonth": 96,
+        "costPerMonth": 96
+      },
+      "ヤギ乳（瓶詰）": {
+        "input": {
+          "ヤギ乳": 10
+        },
+        "output": {
+          "ヤギ乳（瓶詰）": 20
+        },
+        "cyclePerMonth": 14.4,
+        "costPerMonth": 96
+      },
+      "水牛のミルク（瓶詰）": {
+        "input": {
+          "水牛のミルク": 10
+        },
+        "output": {
+          "水牛のミルク（瓶詰）": 20
+        },
+        "cyclePerMonth": 14.4,
+        "costPerMonth": 192
+      },
+      "水牛のモッツァレラチーズ": {
+        "input": {
+          "水牛のミルク": 3
+        },
+        "output": {
+          "水牛のモッツァレラチーズ": 2
+        },
+        "cyclePerMonth": 48,
+        "costPerMonth": 192
+      },
+      "牛乳（瓶詰）": {
+        "input": {
+          "牛乳": 10
+        },
+        "output": {
+          "牛乳（瓶詰）": 20
+        },
+        "cyclePerMonth": 48,
+        "costPerMonth": 24
+      }
+    }
+  },
+  "防水シートグリーンハウス（大）": {
+    "price": 36000,
+    "storage": {
+      "水": 40000,
+      "イチゴ": 28000,
+      "チリペッパー": 28000,
+      "トマト": 28000,
+      "ニンニク": 28000,
+      "ネギ": 28000,
+      "レタス": 28000,
+      "白菜": 28000
+    },
+    "products": {
+      "イチゴ": {
+        "input": {
+          "水": 4
+        },
+        "output": {
+          "イチゴ": 8
+        },
+        "cyclePerMonth": 528,
+        "costPerMonth": 2
+      },
+      "チリペッパー": {
+        "input": {
+          "水": 12
+        },
+        "output": {
+          "チリペッパー": 8
+        },
+        "cyclePerMonth": 528,
+        "costPerMonth": 2
+      },
+      "トマト": {
+        "input": {
+          "水": 4
+        },
+        "output": {
+          "トマト": 4
+        },
+        "cyclePerMonth": 1056,
+        "costPerMonth": 2
+      },
+      "ニンニク": {
+        "input": {
+          "水": 12
+        },
+        "output": {
+          "ニンニク": 6
+        },
+        "cyclePerMonth": 720,
+        "costPerMonth": 2
+      },
+      "ネギ": {
+        "input": {
+          "水": 6
+        },
+        "output": {
+          "ネギ": 12
+        },
+        "cyclePerMonth": 336,
+        "costPerMonth": 2
+      },
+      "レタス": {
+        "input": {
+          "水": 8
+        },
+        "output": {
+          "レタス": 4
+        },
+        "cyclePerMonth": 1008,
+        "costPerMonth": 2
+      },
+      "白菜": {
+        "input": {
+          "水": 8
+        },
+        "output": {
+          "白菜": 6
+        },
+        "cyclePerMonth": 672,
+        "costPerMonth": 2
+      }
+    }
+  },
+  "防水シートグリーンハウス（中）": {
+    "price": 18000,
+    "storage": {
+      "水": 20000,
+      "イチゴ": 14000,
+      "チリペッパー": 14000,
+      "トマト": 14000,
+      "ニンニク": 14000,
+      "ネギ": 14000,
+      "レタス": 14000,
+      "白菜": 14000
+    },
+    "products": {
+      "イチゴ": {
+        "input": {
+          "水": 2
+        },
+        "output": {
+          "イチゴ": 4
+        },
+        "cyclePerMonth": 528,
+        "costPerMonth": 2
+      },
+      "チリペッパー": {
+        "input": {
+          "水": 6
+        },
+        "output": {
+          "チリペッパー": 4
+        },
+        "cyclePerMonth": 528,
+        "costPerMonth": 2
+      },
+      "トマト": {
+        "input": {
+          "水": 2
+        },
+        "output": {
+          "トマト": 2
+        },
+        "cyclePerMonth": 1056,
+        "costPerMonth": 2
+      },
+      "ニンニク": {
+        "input": {
+          "水": 6
+        },
+        "output": {
+          "ニンニク": 3
+        },
+        "cyclePerMonth": 720,
+        "costPerMonth": 2
+      },
+      "ネギ": {
+        "input": {
+          "水": 3
+        },
+        "output": {
+          "ネギ": 6
+        },
+        "cyclePerMonth": 336,
+        "costPerMonth": 2
+      },
+      "レタス": {
+        "input": {
+          "水": 4
+        },
+        "output": {
+          "レタス": 2
+        },
+        "cyclePerMonth": 1008,
+        "costPerMonth": 2
+      },
+      "白菜": {
+        "input": {
+          "水": 4
+        },
+        "output": {
+          "白菜": 3
+        },
+        "cyclePerMonth": 672,
+        "costPerMonth": 2
+      }
+    }
+  },
+  "防水シートグリーンハウス（小）": {
+    "price": 36000,
+    "storage": {
+      "水": 10000,
+      "イチゴ": 7000,
+      "チリペッパー": 7000,
+      "トマト": 7000,
+      "ニンニク": 7000,
+      "ネギ": 7000,
+      "レタス": 7000,
+      "白菜": 7000
+    },
+    "products": {
+      "イチゴ": {
+        "input": {
+          "水": 1
+        },
+        "output": {
+          "イチゴ": 2
+        },
+        "cyclePerMonth": 528,
+        "costPerMonth": 2
+      },
+      "チリペッパー": {
+        "input": {
+          "水": 3
+        },
+        "output": {
+          "チリペッパー": 2
+        },
+        "cyclePerMonth": 528,
+        "costPerMonth": 2
+      },
+      "トマト": {
+        "input": {
+          "水": 1
+        },
+        "output": {
+          "トマト": 1
+        },
+        "cyclePerMonth": 1056,
+        "costPerMonth": 2
+      },
+      "ニンニク": {
+        "input": {
+          "水": 3
+        },
+        "output": {
+          "ニンニク": 1.5
+        },
+        "cyclePerMonth": 720,
+        "costPerMonth": 2
+      },
+      "ネギ": {
+        "input": {
+          "水": 1.5
+        },
+        "output": {
+          "ネギ": 3
+        },
+        "cyclePerMonth": 336,
+        "costPerMonth": 2
+      },
+      "レタス": {
+        "input": {
+          "水": 2
+        },
+        "output": {
+          "レタス": 1
+        },
+        "cyclePerMonth": 1008,
+        "costPerMonth": 2
+      },
+      "白菜": {
+        "input": {
+          "水": 2
+        },
+        "output": {
+          "白菜": 1.5
+        },
+        "cyclePerMonth": 672,
+        "costPerMonth": 2
+      }
+    }
+  }
+}
