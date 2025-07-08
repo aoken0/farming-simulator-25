@@ -9,27 +9,29 @@ export type Item = {
 }
 export type Product = {
   [productName: string]: {
+    reading: string,
     factory: string[],
     alias: string[],
-  },
+  }
+}
+export type ProductionInfo = {
+  [productName: string]: {
+    input: {
+      [materialName: string]: number,
+    }
+    output: {
+      [materialName: string]: number,
+    }
+    cyclePerMonth: number,
+    costPerMonth: number,
+  }
 }
 export type Factory = {
   [factoryName: string]: {
     price: number,
     storage: {
       [materialName: string]: number,
-    },
-    products: {
-      [productName: string]: {
-        input: {
-          [materialName: string]: number,
-        },
-        output: {
-          [materialName: string]: number,
-        },
-        cyclePerMonth: number,
-        costPerMonth: number,
-      }
     }
+    products: ProductionInfo,
   }
 }
