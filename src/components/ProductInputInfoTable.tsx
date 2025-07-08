@@ -4,15 +4,15 @@ type Props = {
   children: React.ReactNode,
 }
 
-const ProductExportInfoTable: React.FC<Props> = ({children}) => {
+const ProductInputInfoTable: React.FC<Props> = ({children}) => {
   return (
     <TableWrapper>
       <tbody>
         <tr>
-          <TableTypeHeader>生産</TableTypeHeader>
-          <TableHeader>生産品名</TableHeader>
-          <TableHeader>月間生産量</TableHeader>
-          <TableHeader>年間生産量</TableHeader>
+          <TableTypeHeader>消費</TableTypeHeader>
+          <TableHeader>消費品名</TableHeader>
+          <TableHeader>月間消費量</TableHeader>
+          <TableHeader>年間消費量</TableHeader>
         </tr>
         {children}
       </tbody>
@@ -20,11 +20,12 @@ const ProductExportInfoTable: React.FC<Props> = ({children}) => {
   )
 }
 
-export default ProductExportInfoTable
+export default ProductInputInfoTable
 
 const TableWrapper = styled.table`
   width: 100%;
   border-collapse: separate;
+  margin-top: 1em;
   table-layout: fixed;
   th {
     width: 8em;
@@ -35,13 +36,10 @@ const TableWrapper = styled.table`
     width: calc((100% - 8em) / 3);
     background-color: #f0f0f0;
     text-align: center;
-    &:first-child {
-      width: calc((100% - 8em) / 3);
-    }
   }
 `
 const TableTypeHeader = styled.th`
-  background-color:rgb(70, 175, 0) !important;
+  background-color:rgb(175, 0, 0) !important;
   color: #ffffff;
   text-align: center;
 `

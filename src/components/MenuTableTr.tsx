@@ -32,6 +32,7 @@ const Tr = styled.tr`
     position: relative;
     &::after {
       content: "▼";
+      font-size: 0.8em;
       position: absolute;
       top: 50%;
       right: 1em;

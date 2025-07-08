@@ -8,10 +8,12 @@ import MenuTableTrSelect from "@/components/MenuTableTrSelect";
 import productDataJSON from '../../../public/data/product.json';
 import factoryDataJSON from '../../../public/data/factory.json';
 import { Product, Factory } from '@/utils/type';
-import ProductExportInfoTable from '@/components/ProductExportInfoTable';
 import { getProductionVolume, getConsumption } from '@/utils/calc';
 import React from 'react';
 import Small from '@/components/Small';
+import ProductInfoWrapper from '@/components/ProductInfoWrapper';
+import ProductExportInfoTable from '@/components/ProductExportInfoTable';
+import ProductInputInfoTable from '@/components/ProductInputInfoTable';
 
 const ReverseProduction = () => {
   const [productData, setProductData] = useState<Product>({});
@@ -97,19 +99,31 @@ const ReverseProduction = () => {
       </MenuTable>
       {selectedFactory && selectedProduct &&
       <>
-      <Small>※ 量の単位はすべてL</Small>
-      <ProductExportInfoTable $factoryName={selectedFactory}>
-        <tr>
-          <th>{selectedProduct}</th>
-          {getProductionVolume(factoryData[selectedFactory].products, selectedProduct).map(([key, volPerM, volPerY], i) => (
-            <React.Fragment key={`main-export-production-${key}-${i}`}>
-              <td className="productName">{key}</td>
+      <Small>※ 量の単位はすべてL / 小数点以下切り上げ</Small>
+      <ProductInfoWrapper $factoryName={selectedFactory}>
+        <ProductExportInfoTable>
+          <tr>
+            <th>{selectedProduct}</th>
+            {getProductionVolume(factoryData[selectedFactory].products, selectedProduct).map(([key, volPerM, volPerY], i) => (
+              <React.Fragment key={`export-${key}-${i}`}>
+                <td>{key}</td>
+                <td>{volPerM}</td>
+                <td>{volPerY}</td>
+              </React.Fragment>
+            ))}
+          </tr>
+        </ProductExportInfoTable>
+        <ProductInputInfoTable>
+          {getConsumption(factoryData[selectedFactory].products, selectedProduct).map(([key, volPerM, volPerY], i) => (
+            <tr key={`input-${key}-${i}`}>
+              <th>{key}</th>
+              <td>{key}</td>
               <td>{volPerM}</td>
               <td>{volPerY}</td>
-            </React.Fragment>
+            </tr>
           ))}
-        </tr>
-      </ProductExportInfoTable>
+        </ProductInputInfoTable>
+      </ProductInfoWrapper>
       </>
       }
     </GlobalWrapper>
