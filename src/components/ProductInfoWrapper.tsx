@@ -2,12 +2,13 @@ import styled from "styled-components"
 
 type Props = {
   $factoryName: string,
+  $style?: React.CSSProperties,
   children: React.ReactNode,
 }
 
-const ProductExportInfoWrapper: React.FC<Props> = ({$factoryName, children}) => {
+const ProductExportInfoWrapper: React.FC<Props> = ({$factoryName, children, $style}) => {
   return (
-    <Wrapper>
+    <Wrapper style={$style}>
       <Title>{$factoryName}</Title>
       {children}
     </Wrapper>

@@ -1,6 +1,12 @@
 import { ProductionInfo } from "./type"
 
-export const getProductionVolume = (productionInfo: ProductionInfo, productName: string) => {
+export type VolumeInfo = [
+  key: string,
+  volumePerMonth: number,
+  volumePerYear: number,
+]
+
+export const getProductionVolume = (productionInfo: ProductionInfo, productName: string): VolumeInfo[] => {
   const outputs = Object.entries(productionInfo[productName].output);
   const cyclePerMonth = productionInfo[productName].cyclePerMonth;
 
@@ -8,13 +14,13 @@ export const getProductionVolume = (productionInfo: ProductionInfo, productName:
   const volumeInfo = outputs.map(([key, amount]) => {
     const volumePerMonth = Math.ceil(amount * cyclePerMonth);
     const volumePerYear = volumePerMonth * 12;
-    return [key, volumePerMonth, volumePerYear];
+    return [key, volumePerMonth, volumePerYear] as VolumeInfo;
   })
 
   return volumeInfo;
 }
 
-export const getConsumption = (productionInfo: ProductionInfo, productName: string) => {
+export const getConsumption = (productionInfo: ProductionInfo, productName: string): VolumeInfo[]  => {
   const inputs = Object.entries(productionInfo[productName].input);
   const cyclePerMonth = productionInfo[productName].cyclePerMonth;
 
@@ -22,7 +28,21 @@ export const getConsumption = (productionInfo: ProductionInfo, productName: stri
   const volumeInfo = inputs.map(([key, amount]) => {
     const volumePerMonth = Math.ceil(amount * cyclePerMonth);
     const volumePerYear = volumePerMonth * 12;
-    return [key, volumePerMonth, volumePerYear];
+    return [key, volumePerMonth, volumePerYear] as VolumeInfo;
+  })
+
+  return volumeInfo;
+}
+
+export const getRequiredMaterials = (productionInfo: ProductionInfo, productName: string, monthlyProductionVolume: number) => {
+  const inputs = Object.entries(productionInfo[productName].input);
+  const outputs = Object.entries(productionInfo[productName].output)
+  // const cyclePerMonth = productionInfo[productName].cyclePerMonth;
+
+  const volumeInfo = inputs.map(([key, amount], i) => {
+    const changeRate = amount / outputs[i][1]; // 製品を1としたときの材料費
+    const requiredPerMonth = monthlyProductionVolume * changeRate;
+    return [key, Math.ceil(requiredPerMonth), Math.ceil(requiredPerMonth*12)] as VolumeInfo;
   })
 
   return volumeInfo;

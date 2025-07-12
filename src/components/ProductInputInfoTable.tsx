@@ -25,7 +25,7 @@ export default ProductInputInfoTable
 const TableWrapper = styled.table`
   width: 100%;
   border-collapse: separate;
-  margin-top: 1em;
+  margin-top: 0.5em;
   table-layout: fixed;
   th {
     width: 8em;
