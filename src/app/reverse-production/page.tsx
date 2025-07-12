@@ -16,8 +16,18 @@ import ProductExportInfoTable from '@/components/ProductExportInfoTable';
 import ProductInputInfoTable from '@/components/ProductInputInfoTable';
 import styled from 'styled-components';
 
-type ProductionInfo = {
-  factoryName: string[],
+// type ProductionInfo = {
+//   factoryName: string[],
+//   productName: string,
+//   monthlyRequired: number,
+//   yearlyRequired: number,
+// }
+
+type MiddleProductionData = {
+  factoryName: string,
+  factories: string[],
+  productType: string,
+  productAlias: string | string[],
   productName: string,
   monthlyRequired: number,
   yearlyRequired: number,
@@ -35,7 +45,7 @@ const ReverseProduction = () => {
   const [finalProductionVolume, setFinalProductionVolume] = useState<VolumeInfo[]>([]);
   const [finalConsumptionVolume, setFinalConsumptionVolume] = useState<VolumeInfo[]>([]);
   const [middleProduction, setMiddleProduction] = useState<VolumeInfo[][][]>([]);
-  const [middleProductionInfo, setMiddleProductionInfo] = useState<ProductionInfo[]>([]);
+  const [middleProductionInfo, setMiddleProductionInfo] = useState<MiddleProductionData[]>([]);
 
   useEffect(() => {
     const sortedProductData = Object.fromEntries(
@@ -66,8 +76,17 @@ const ReverseProduction = () => {
     // 中間素材
     const middleMaterial = finalConsumptionVol.filter(item => Object.keys(productData).includes(item[0] as string));
     const middleMaterialInfo = middleMaterial.map(([material, monthly, yearly]) => {
-      const materialName = productData[material].alias[0] || material; 
-      return {factoryName: productData[material].factory, productName: materialName as string, monthlyRequired: Number(monthly), yearlyRequired: Number(yearly)}
+      // const materialName = productData[material].alias[0] || material;
+      const obj: MiddleProductionData = {
+        factoryName: productData[material].factory[0],
+        factories: productData[material].factory,
+        productType: productData[material].alias[0] || material,
+        productAlias: productData[material].alias.length ? productData[material].alias :  material,
+        productName: material,
+        monthlyRequired: Number(monthly),
+        yearlyRequired: Number(yearly),
+      }
+      return obj;
     })
     const middleProductionVol = middleMaterial.map(([material, monthly, yearly]) => {
       const materialName = productData[material].alias[0] || material;
@@ -81,7 +100,6 @@ const ReverseProduction = () => {
     const middleProd = middleProductionVol.map((e, i) => [e, middleConsumptionVol[i]]);
     setMiddleProductionInfo(middleMaterialInfo)
     setMiddleProduction(middleProd);
-    // console.log(middleProd)
   }, [factoryData, productData, productType.length, selectedFactory, selectedProduct, selectedProductType])
 
   const handleChangeProduct = (product: string) => {
@@ -106,6 +124,10 @@ const ReverseProduction = () => {
   }
   const handleChangeFactory = (factory: string) => {
     setSelectedFactory(factory);
+  }
+
+  const handleChangeMiddleFactory = (factory: string) => {
+    console.log(factory)
   }
 
   return (
@@ -180,13 +202,23 @@ const ReverseProduction = () => {
 
       <TableCategoryTitle>中間工程</TableCategoryTitle>
       {middleProduction.map((e, i) => (
-        <ProductInfoWrapper key={`midProd-${i}`} $factoryName={middleProductionInfo[i].factoryName[0]} $style={{marginBottom:"3em"}}>
+        <ProductInfoWrapper key={`midProd-${i}`} $factoryName={middleProductionInfo[i].factoryName} $factories={middleProductionInfo[i].factories} $style={{marginBottom:"3em"}}>
           <ProductExportInfoTable>
             <tr>
-              {e[0].map(([key, volPerM, volPerY], i) => (
-                <React.Fragment key={`mid-export-${key}-${i}`}>
-                  <th>{key}</th>
-                  <td>{key}</td>
+              {e[0].map(([key, volPerM, volPerY], j) => (
+                <React.Fragment key={`mid-export-${key}-${j}`}>
+                  {Array.isArray(middleProductionInfo[i].productAlias) ? (
+                    <th className={"product-export-info-th-selector"}>
+                      <select value={key} name={`middle-production-material-selector-${e}-${i}`} onChange={(e) => console.log(e)}>
+                        {middleProductionInfo[i].productAlias.map((e, i) => (
+                          <option key={`middle-production-info-material-${e}-${i}`} value={e}>{e}</option>
+                        ))}
+                      </select>
+                    </th>
+                  ):(
+                    <th>{key}</th>
+                  )}
+                  <td>{middleProductionInfo[i].productName}</td>
                   <td>{volPerM}</td>
                   <td>{volPerY}</td>
                 </React.Fragment>
