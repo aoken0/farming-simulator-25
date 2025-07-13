@@ -16,13 +16,9 @@ import ProductExportInfoTable from '@/components/ProductExportInfoTable';
 import ProductExportInfoTableGraph from '@/components/ProductExportInfoTableGraph';
 import ProductInputInfoTable from '@/components/ProductInputInfoTable';
 import styled from 'styled-components';
-
-// type ProductionInfo = {
-//   factoryName: string[],
-//   productName: string,
-//   monthlyRequired: number,
-//   yearlyRequired: number,
-// }
+import ContentParagraph from '@/components/ContentParagraph';
+import ContentUL from '@/components/ContentUL';
+import ContentP from '@/components/ContentP';
 
 type MiddleProductionData = {
   factoryName: string,
@@ -82,7 +78,6 @@ const ReverseProduction = () => {
       const factoryName = productData[material].factory[0];
       const productType = productData[material].alias[0] || material;
       const pVol = getProductionVolume(factoryData[factoryName].products, productType)
-      console.log(pVol)
       const obj: MiddleProductionData = {
         factoryName: factoryName,
         factories: productData[material].factory,
@@ -182,6 +177,11 @@ const ReverseProduction = () => {
   return (
     <GlobalWrapper>
       <ContentTitle>材料逆引きツール</ContentTitle>
+      <ContentParagraph>
+        <ContentP>
+          生産品と施設を選択することで、必要な素材量や利益がわかります。
+        </ContentP>
+      </ContentParagraph>
       <MenuTable $marginBottom='0.5em'>
         <MenuTableTr $label="生産品">
           <MenuTableTrSelect $name="product" $defaultValue="" $onChange={(e) => handleChangeProduct(e.target.value)}>
@@ -251,28 +251,35 @@ const ReverseProduction = () => {
 
       <TableCategoryTitle>中間工程</TableCategoryTitle>
       {middleProduction.map((e, i) => (
-        <ProductInfoWrapper key={`midProd-${i}`} $factoryName={middleProductionInfo[i].factoryName} $factories={middleProductionInfo[i].factories} $onChange={(e) => handleChangeMiddleFactory(i, e.target.value)} $style={{marginBottom:"3em"}}>
-          <ProductExportInfoTableGraph>
-            <tr>
-              {e[0].map(([key, volPerM, volPerY], j) => (
-                <React.Fragment key={`mid-export-${key}-${j}`}>
-                  {Array.isArray(middleProductionInfo[i].productAlias) ? (
-                    <th className={"product-export-info-th-selector"}>
-                      <select defaultValue={key} name={`middle-production-material-selector-${e}-${i}`} onChange={(e) => handleChangeMiddleProductType(i, e.target.value)}>
-                        {middleProductionInfo[i].productAlias.map((e, i) => (
-                          <option key={`middle-production-info-material-${e}-${i}`} value={e}>{e}</option>
-                        ))}
-                      </select>
-                    </th>
-                  ):(
-                    <th>{key}</th>
-                  )}
-                  <td>{middleProductionInfo[i].productName}</td>
-                  <td>{volPerM}</td>
-                  <td>{volPerY}</td>
-                </React.Fragment>
-              ))}
-            </tr>
+        <ProductInfoWrapper key={`midProd-${i}`}
+          $factoryName={middleProductionInfo[i].factoryName}
+          $factories={middleProductionInfo[i].factories}
+          $onChange={(e) => handleChangeMiddleFactory(i, e.target.value)}
+          $style={{marginBottom:"3em"}}
+          >
+          <ProductExportInfoTableGraph 
+            $monthlyCapacity={middleProductionInfo[i].monthlyMax}
+            $monthlyRequired={middleProductionInfo[i].monthlyRequired}
+          >
+            {e[0].map(([key, , ], j) => (
+            // {e[0].map(([key, volPerM, volPerY], j) => (
+              <React.Fragment key={`mid-export-${key}-${j}`}>
+                {Array.isArray(middleProductionInfo[i].productAlias) ? (
+                  <th className={"product-export-info-th-selector"}>
+                    <select defaultValue={key} name={`middle-production-material-selector-${e}-${i}`} onChange={(e) => handleChangeMiddleProductType(i, e.target.value)}>
+                      {middleProductionInfo[i].productAlias.map((e, i) => (
+                        <option key={`middle-production-info-material-${e}-${i}`} value={e}>{e}</option>
+                      ))}
+                    </select>
+                  </th>
+                ):(
+                  <th>{key}</th>
+                )}
+                <td>{middleProductionInfo[i].productName}</td>
+                {/* <td>{volPerM}</td>
+                <td>{volPerY}</td> */}
+              </React.Fragment>
+            ))}
           </ProductExportInfoTableGraph>
           <ProductInputInfoTable>
             {e[1].map(([key, volPerM, volPerY], i) => (

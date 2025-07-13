@@ -22,6 +22,6 @@ const UL = styled.ul`
   list-style-position: inside;
   li {
     line-height: 1.5em; 
-    margin-bottom: 1em;
+    margin-bottom: 0.5em;
   }
 `

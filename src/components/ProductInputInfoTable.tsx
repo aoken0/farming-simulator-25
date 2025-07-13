@@ -29,6 +29,7 @@ const TableWrapper = styled.table`
   table-layout: fixed;
   th {
     width: 8em;
+    height: 2.4em;
     text-align: center;
     background-color: #dddddd;
   }

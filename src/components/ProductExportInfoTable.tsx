@@ -28,19 +28,18 @@ const TableWrapper = styled.table`
   table-layout: fixed;
   th {
     width: 8em;
+    height: 2.4em;
     text-align: center;
     background-color: #dddddd;
     select {
       width: 100%;
       background-color: #eee !important;
-      line-height: 2.4em;
       box-shadow: 0 0 4px 2px #ddd inset;
       outline: none;
     }
   }
   .product-export-info-th-selector {
     width: 100%;
-    line-height: 2.4em;
     position: relative;
     &::after {
       content: "▼";
