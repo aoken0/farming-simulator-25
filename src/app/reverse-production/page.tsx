@@ -13,6 +13,7 @@ import { VolumeInfo, getProductionVolume, getConsumption, getRequiredMaterials }
 import Small from '@/components/Small';
 import ProductInfoWrapper from '@/components/ProductInfoWrapper';
 import ProductExportInfoTable from '@/components/ProductExportInfoTable';
+import ProductExportInfoTableGraph from '@/components/ProductExportInfoTableGraph';
 import ProductInputInfoTable from '@/components/ProductInputInfoTable';
 import styled from 'styled-components';
 
@@ -31,6 +32,8 @@ type MiddleProductionData = {
   productName: string,
   monthlyRequired: number,
   yearlyRequired: number,
+  monthlyMax: number,
+  yearlyMax: number,
 }
 
 const ReverseProduction = () => {
@@ -76,14 +79,20 @@ const ReverseProduction = () => {
     // 中間素材
     const middleMaterial = finalConsumptionVol.filter(item => Object.keys(productData).includes(item[0] as string));
     const middleMaterialInfo = middleMaterial.map(([material, monthly, yearly]) => {
+      const factoryName = productData[material].factory[0];
+      const productType = productData[material].alias[0] || material;
+      const pVol = getProductionVolume(factoryData[factoryName].products, productType)
+      console.log(pVol)
       const obj: MiddleProductionData = {
-        factoryName: productData[material].factory[0],
+        factoryName: factoryName,
         factories: productData[material].factory,
-        productType: productData[material].alias[0] || material,
+        productType: productType,
         productAlias: productData[material].alias.length ? productData[material].alias :  material,
         productName: material,
         monthlyRequired: Number(monthly),
         yearlyRequired: Number(yearly),
+        monthlyMax: pVol[0][1],
+        yearlyMax: pVol[0][2],
       }
       return obj;
     })
@@ -132,17 +141,39 @@ const ReverseProduction = () => {
 
 
   const handleChangeMiddleFactory = (i: number, newFactory: string) => {
-    const updatedInfo = middleProductionInfo.map((item, j) => (
-      j === i ? {...item, factoryName: newFactory} : item
-    ))
+    const updatedInfo = middleProductionInfo.map((item, j) => {
+      if (j === i) {
+        const productType = item.productType;
+        const pVol = getProductionVolume(factoryData[newFactory].products, productType);
+
+        return {
+          ...item,
+          factoryName: newFactory,
+          monthlyMax: Number(pVol[0][1]),
+          yearlyMax: Number(pVol[0][2]),
+        };
+      }
+      return item;
+    });
     console.log(updatedInfo[i])
     setMiddleProduction(getMiddleProductionData(updatedInfo))
     setMiddleProductionInfo(updatedInfo)
   }
   const handleChangeMiddleProductType = (i: number, newProductType: string) => {
-    const updatedInfo = middleProductionInfo.map((item, j) => (
-      j === i ? {...item, productType: newProductType} : item
-    ))
+    const updatedInfo = middleProductionInfo.map((item, j) => {
+      if (j === i) {
+        const factoryName = item.factoryName
+        const pVol = getProductionVolume(factoryData[factoryName].products, newProductType);
+
+        return {
+          ...item,
+          productType: newProductType,
+          monthlyMax: Number(pVol[0][1]),
+          yearlyMax: Number(pVol[0][2]),
+        };
+      }
+      return item;
+    });
     console.log(updatedInfo[i])
     setMiddleProduction(getMiddleProductionData(updatedInfo))
     setMiddleProductionInfo(updatedInfo)
@@ -221,7 +252,7 @@ const ReverseProduction = () => {
       <TableCategoryTitle>中間工程</TableCategoryTitle>
       {middleProduction.map((e, i) => (
         <ProductInfoWrapper key={`midProd-${i}`} $factoryName={middleProductionInfo[i].factoryName} $factories={middleProductionInfo[i].factories} $onChange={(e) => handleChangeMiddleFactory(i, e.target.value)} $style={{marginBottom:"3em"}}>
-          <ProductExportInfoTable>
+          <ProductExportInfoTableGraph>
             <tr>
               {e[0].map(([key, volPerM, volPerY], j) => (
                 <React.Fragment key={`mid-export-${key}-${j}`}>
@@ -242,7 +273,7 @@ const ReverseProduction = () => {
                 </React.Fragment>
               ))}
             </tr>
-          </ProductExportInfoTable>
+          </ProductExportInfoTableGraph>
           <ProductInputInfoTable>
             {e[1].map(([key, volPerM, volPerY], i) => (
               <tr key={`mid-input-${key}-${i}`}>
