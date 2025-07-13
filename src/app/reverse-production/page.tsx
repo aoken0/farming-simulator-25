@@ -17,7 +17,6 @@ import ProductExportInfoTableGraph from '@/components/ProductExportInfoTableGrap
 import ProductInputInfoTable from '@/components/ProductInputInfoTable';
 import styled from 'styled-components';
 import ContentParagraph from '@/components/ContentParagraph';
-import ContentUL from '@/components/ContentUL';
 import ContentP from '@/components/ContentP';
 
 type MiddleProductionData = {
@@ -150,7 +149,6 @@ const ReverseProduction = () => {
       }
       return item;
     });
-    console.log(updatedInfo[i])
     setMiddleProduction(getMiddleProductionData(updatedInfo))
     setMiddleProductionInfo(updatedInfo)
   }
@@ -169,7 +167,6 @@ const ReverseProduction = () => {
       }
       return item;
     });
-    console.log(updatedInfo[i])
     setMiddleProduction(getMiddleProductionData(updatedInfo))
     setMiddleProductionInfo(updatedInfo)
   }
@@ -249,7 +246,7 @@ const ReverseProduction = () => {
       </ProductInfoWrapper>
 
 
-      <TableCategoryTitle>中間工程</TableCategoryTitle>
+      {middleProductionInfo.length > 0 && <TableCategoryTitle>中間工程</TableCategoryTitle>}
       {middleProduction.map((e, i) => (
         <ProductInfoWrapper key={`midProd-${i}`}
           $factoryName={middleProductionInfo[i].factoryName}
