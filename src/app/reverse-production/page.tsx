@@ -76,7 +76,6 @@ const ReverseProduction = () => {
     // 中間素材
     const middleMaterial = finalConsumptionVol.filter(item => Object.keys(productData).includes(item[0] as string));
     const middleMaterialInfo = middleMaterial.map(([material, monthly, yearly]) => {
-      // const materialName = productData[material].alias[0] || material;
       const obj: MiddleProductionData = {
         factoryName: productData[material].factory[0],
         factories: productData[material].factory,
@@ -88,19 +87,24 @@ const ReverseProduction = () => {
       }
       return obj;
     })
-    const middleProductionVol = middleMaterial.map(([material, monthly, yearly]) => {
-      const materialName = productData[material].alias[0] || material;
-      return [[materialName, monthly, yearly]] as VolumeInfo[];
-    })
-    const middleConsumptionVol = middleMaterial.map(([material, monthly, ]) => {
-      const materialName = productData[material].alias[0] || material;
-      return getRequiredMaterials(factoryData[productData[material].factory[0]].products, materialName as string, Number(monthly))
-    })
-    
-    const middleProd = middleProductionVol.map((e, i) => [e, middleConsumptionVol[i]]);
     setMiddleProductionInfo(middleMaterialInfo)
-    setMiddleProduction(middleProd);
+    setMiddleProduction(getMiddleProductionData(middleMaterialInfo))
   }, [factoryData, productData, productType.length, selectedFactory, selectedProduct, selectedProductType])
+
+
+  const getMiddleProductionData = (middleMaterialInfo: MiddleProductionData[]) => {
+    const middleProductionVol = middleMaterialInfo.map((info, ) => {
+      const materialName = info.productType;
+      return [[materialName, info.monthlyRequired, info.yearlyRequired]] as VolumeInfo[];
+    })
+    const middleConsumptionVol = middleMaterialInfo.map((info, ) => {
+      const materialName = info.productType;
+      return getRequiredMaterials(factoryData[info.factoryName].products, materialName as string, info.monthlyRequired)
+    })
+    const middleProd = middleProductionVol.map((e, i) => [e, middleConsumptionVol[i]]);
+    return middleProd;
+  }
+
 
   const handleChangeProduct = (product: string) => {
     if (!product) {
@@ -126,8 +130,22 @@ const ReverseProduction = () => {
     setSelectedFactory(factory);
   }
 
-  const handleChangeMiddleFactory = (factory: string) => {
-    console.log(factory)
+
+  const handleChangeMiddleFactory = (i: number, newFactory: string) => {
+    const updatedInfo = middleProductionInfo.map((item, j) => (
+      j === i ? {...item, factoryName: newFactory} : item
+    ))
+    console.log(updatedInfo[i])
+    setMiddleProduction(getMiddleProductionData(updatedInfo))
+    setMiddleProductionInfo(updatedInfo)
+  }
+  const handleChangeMiddleProductType = (i: number, newProductType: string) => {
+    const updatedInfo = middleProductionInfo.map((item, j) => (
+      j === i ? {...item, productType: newProductType} : item
+    ))
+    console.log(updatedInfo[i])
+    setMiddleProduction(getMiddleProductionData(updatedInfo))
+    setMiddleProductionInfo(updatedInfo)
   }
 
   return (
@@ -202,14 +220,14 @@ const ReverseProduction = () => {
 
       <TableCategoryTitle>中間工程</TableCategoryTitle>
       {middleProduction.map((e, i) => (
-        <ProductInfoWrapper key={`midProd-${i}`} $factoryName={middleProductionInfo[i].factoryName} $factories={middleProductionInfo[i].factories} $style={{marginBottom:"3em"}}>
+        <ProductInfoWrapper key={`midProd-${i}`} $factoryName={middleProductionInfo[i].factoryName} $factories={middleProductionInfo[i].factories} $onChange={(e) => handleChangeMiddleFactory(i, e.target.value)} $style={{marginBottom:"3em"}}>
           <ProductExportInfoTable>
             <tr>
               {e[0].map(([key, volPerM, volPerY], j) => (
                 <React.Fragment key={`mid-export-${key}-${j}`}>
                   {Array.isArray(middleProductionInfo[i].productAlias) ? (
                     <th className={"product-export-info-th-selector"}>
-                      <select value={key} name={`middle-production-material-selector-${e}-${i}`} onChange={(e) => console.log(e)}>
+                      <select defaultValue={key} name={`middle-production-material-selector-${e}-${i}`} onChange={(e) => handleChangeMiddleProductType(i, e.target.value)}>
                         {middleProductionInfo[i].productAlias.map((e, i) => (
                           <option key={`middle-production-info-material-${e}-${i}`} value={e}>{e}</option>
                         ))}

@@ -13,9 +13,9 @@ const ProductExportInfoWrapper: React.FC<Props> = ({$factoryName, $factories, ch
     <Wrapper style={$style}>
       {$factories ? (
         <SelectorWrapper>
-          <Selector value={$factoryName} onChange={$onChange ? (e) => $onChange(e) : () => {}}>
+          <Selector defaultValue={$factoryName} onChange={$onChange ? (e) => $onChange(e) : () => {}}>
             {$factories.map((key, i) => (
-              <option key={`factory-selector-${key}-${i}`} value="key">{key}</option>
+              <option key={`factory-selector-${key}-${i}`} value={key}>{key}</option>
             ))}
           </Selector>
         </SelectorWrapper>
