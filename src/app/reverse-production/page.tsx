@@ -195,7 +195,7 @@ const ReverseProduction = () => {
       <ProductInfoWrapper $factoryName={selectedFactory} $style={{marginBottom:"4em"}}>
         <ProductExportInfoTable>
           <tr>
-            <th>{selectedProductType}</th>
+            <th>{selectedProductType ? selectedProductType : selectedProduct}</th>
             {finalProductionVolume.map(([key, volPerM, volPerY], i) => (
               <React.Fragment key={`export-${key}-${i}`}>
                 <td>{key}</td>
