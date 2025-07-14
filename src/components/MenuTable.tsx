@@ -3,12 +3,13 @@ import styled from "styled-components"
 
 type Props = {
   children: ReactElement<HTMLTableRowElement> | ReactElement<HTMLTableRowElement>[];
+  $marginBottom?: string;
 }
 
-const MenuTable: React.FC<Props> = ({children}) => {
+const MenuTable: React.FC<Props> = ({children, $marginBottom}) => {
 
   return (
-    <TableWrapper>
+    <TableWrapper $marginBottom={$marginBottom}>
       <tbody>
         {children}
       </tbody>
@@ -18,11 +19,11 @@ const MenuTable: React.FC<Props> = ({children}) => {
 
 export default MenuTable
 
-const TableWrapper = styled.table`
+const TableWrapper = styled.table<{$marginBottom: string | undefined}>`
   width: 100%;
   margin: 0 auto;
   border: 1px solid #999;
   border-collapse:separate;
   border-spacing: 0;
-  margin-bottom: 1em;
+  margin-bottom: ${({$marginBottom}) => $marginBottom ? $marginBottom : "1em"};
 `

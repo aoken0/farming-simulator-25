@@ -1,4 +1,5 @@
 import styled from "styled-components"
+import { notoSansJP } from "@/utils/font"
 
 type Props = {
   children: React.ReactNode
@@ -6,7 +7,7 @@ type Props = {
 
 const GlobalWrapper: React.FC<Props> = ({children}) => {
   return (
-    <Wrapper>
+    <Wrapper className={notoSansJP.className}>
       <Header>
         <h1><a href="./">Farming Simulator 25 wiki</a></h1>
       </Header>

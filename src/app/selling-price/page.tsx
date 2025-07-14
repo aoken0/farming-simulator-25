@@ -12,6 +12,7 @@ import ContentUL from "@/components/ContentUL";
 import MenuTable from "@/components/MenuTable";
 import MenuTableTr from "@/components/MenuTableTr";
 import MenuTableTrSelect from "@/components/MenuTableTrSelect";
+import Small from "@/components/Small";
 
 const SellingPrice = () => {
   const [sellingPrices, setSellingPrices] = useState<Item[]>([]);
@@ -75,7 +76,7 @@ const SellingPrice = () => {
           </MenuTableTrSelect>
         </MenuTableTr>
       </MenuTable>
-      <small style={{fontSize: "max(0.3em, 10px)"}}>※ 項目名クリックでソート</small>
+      <Small>※ 項目名クリックでソート</Small>
       <Table>
       <tbody>
         <TableHeader>
