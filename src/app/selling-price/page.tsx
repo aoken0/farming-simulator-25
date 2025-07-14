@@ -18,14 +18,15 @@ const SellingPrice = () => {
   const [sellingPrices, setSellingPrices] = useState<Item[]>([]);
   const [sortMode, setSortMode] = useState<string>("");
   const [isReverse, setIsReverse] = useState<boolean>(false);
-  // const [difficulty, setDifficulty] = useState<string>("normal");
   const [multiplier, setMultiplier] = useState<number>(0.6);
 
   useEffect(() => {
-    const tmp = data.map((items) => ({
-      ...items,
-      maxMonthLabel: formatMonths(items.maxMonths),
-    }))
+    const tmp = data
+      .filter(item => item.type !== "extra")
+      .map((item) => ({
+        ...item,
+        maxMonthLabel: formatMonths(item.maxMonths),
+      }))
     setSellingPrices(tmp);
   }, [])
 
