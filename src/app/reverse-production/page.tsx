@@ -55,6 +55,7 @@ const ReverseProduction = () => {
   const [middleProductFinancials, setMiddleProductFinancials] = useState<ProductFinancials[]>([]);
   const [middleProduction, setMiddleProduction] = useState<VolumeInfo[][][]>([]);
   const [middleProductionInfo, setMiddleProductionInfo] = useState<MiddleProductionData[]>([]);
+  const [multiplier, setMultiplier] = useState<number>(0.6);
 
   useEffect(() => {
     const sortedProductData = Object.fromEntries(
@@ -86,7 +87,7 @@ const ReverseProduction = () => {
     setFinalConsumptionVolume(finalConsumptionVol);
     // 売上・コスト
     const finalProductSellingData = sellingPriceDataJSON.filter((item) => item.name === selectedProduct)
-    const sales = Math.round(finalProductSellingData[0].maxPrice * finalProductionVol[0][2] / 1000);
+    const sales = Math.round(finalProductSellingData[0].maxPrice * finalProductionVol[0][2] / 1000 * multiplier);
     const cost = factoryData[factory].products[product].costPerMonth * 12;
     const fProductFinancials: ProductFinancials = {
       productName: selectedProduct,
@@ -121,7 +122,7 @@ const ReverseProduction = () => {
     // 売上・コスト
     const MProductFinancials = middleMaterialInfo.map((item) => {
       const sellingData = sellingPriceDataJSON.filter((e) => e.name === item.productName)
-      const sales = Math.round(sellingData[0].maxPrice * item.yearlyRequired / 1000);
+      const sales = Math.round(sellingData[0].maxPrice * item.yearlyRequired / 1000 * multiplier);
       const cost = factoryData[item.factoryName].products[item.productType].costPerMonth * 12;
       const finances: ProductFinancials = {
         productName: item.productName,
@@ -134,7 +135,7 @@ const ReverseProduction = () => {
     setMiddleProductFinancials(MProductFinancials)
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [factoryData, productData, productType.length, selectedFactory, selectedProduct, selectedProductType])
+  }, [factoryData, productData, productType.length, selectedFactory, selectedProduct, selectedProductType, multiplier])
 
 
   const getMiddleProductionData = (middleMaterialInfo: MiddleProductionData[]) => {
@@ -152,7 +153,7 @@ const ReverseProduction = () => {
   const getMiddleProductFinancials = (middleMaterialInfo: MiddleProductionData[]) => {
     const financials = middleMaterialInfo.map((item) => {
       const sellingData = sellingPriceDataJSON.filter((e) => e.name === item.productName)
-      const sales = Math.round(sellingData[0].maxPrice * item.yearlyRequired / 1000);
+      const sales = Math.round(sellingData[0].maxPrice * item.yearlyRequired / 1000  * multiplier);
       const cost = factoryData[item.factoryName].products[item.productType].costPerMonth * 12;
       const finances: ProductFinancials = {
         productName: item.productName,
@@ -166,6 +167,22 @@ const ReverseProduction = () => {
   }
 
 
+  const handleChangeDifficulty = (difficulty: string) => {
+    switch (difficulty) {
+      case "easy":
+        setMultiplier(1.0)
+        break;
+      case "normal":
+        setMultiplier(0.6)
+        break;
+      case "hard":
+        setMultiplier(1/3)
+        break;
+    
+      default:
+        break;
+    }
+  }
   const handleChangeProduct = (product: string) => {
     if (!product) {
       setProductType([]);
@@ -238,6 +255,17 @@ const ReverseProduction = () => {
           生産品と施設を選択することで、必要な素材量や利益がわかります。
         </ContentP>
       </ContentParagraph>
+      <MenuTable $marginBottom='0.5em'>
+        <MenuTableTr $label="難易度">
+          <MenuTableTrSelect $name="difficulty" $defaultValue="normal" $onChange={(e) => handleChangeDifficulty(e.target.value)}>
+            <>
+              <option value="easy">イージー</option>
+              <option value="normal">ノーマル</option>
+              <option value="hard">ハード</option>
+            </>
+          </MenuTableTrSelect>
+        </MenuTableTr>
+      </MenuTable>
       <MenuTable $marginBottom='0.5em'>
         <MenuTableTr $label="生産品">
           <MenuTableTrSelect $name="product" $defaultValue="" $onChange={(e) => handleChangeProduct(e.target.value)}>
