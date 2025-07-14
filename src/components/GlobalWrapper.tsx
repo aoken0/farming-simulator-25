@@ -1,4 +1,5 @@
 import styled from "styled-components"
+import Link from "next/link"
 import { notoSansJP } from "@/utils/font"
 
 type Props = {
@@ -9,15 +10,15 @@ const GlobalWrapper: React.FC<Props> = ({children}) => {
   return (
     <Wrapper className={notoSansJP.className}>
       <Header>
-        <h1><a href="./">Farming Simulator 25 wiki</a></h1>
+        <h1><Link href="/">Farming Simulator 25 wiki</Link></h1>
       </Header>
       <ContentWrapper>
         <SideCotent>
           <h4>シミュレーター</h4>
-          <p><a href="./production-planner">生産計画ツール</a></p>
-          <p><a href="./reverse-production">材料逆引きツール</a></p>
+          <p><Link href="/production-planner">生産計画ツール</Link></p>
+          <p><Link href="/reverse-production">材料逆引きツール</Link></p>
           <h4>価格</h4>
-          <p><a href="./selling-price">売値</a></p>
+          <p><Link href="/selling-price">売値</Link></p>
         </SideCotent>
         <MainContent>
           {children}
