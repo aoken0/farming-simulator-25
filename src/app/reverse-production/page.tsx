@@ -39,6 +39,10 @@ type ProductFinancials = {
   yearlyCost: number,
   yearlyProfit: number,
 }
+type MaterialFinancials = {
+  materialName: string,
+  yearlyMaxSales: number,
+}
 
 const ReverseProduction = () => {
   const [showTable, setShowTable] = useState<boolean>(false);
@@ -55,6 +59,8 @@ const ReverseProduction = () => {
   const [middleProductFinancials, setMiddleProductFinancials] = useState<ProductFinancials[]>([]);
   const [middleProduction, setMiddleProduction] = useState<VolumeInfo[][][]>([]);
   const [middleProductionInfo, setMiddleProductionInfo] = useState<MiddleProductionData[]>([]);
+  const [materialFinancials, setMaterialFinancials] = useState<MaterialFinancials[]>([]);
+  const [materialProfitSum, setMaterialProfitSum] = useState<number>(0);
   const [multiplier, setMultiplier] = useState<number>(0.6);
 
   useEffect(() => {
@@ -97,19 +103,19 @@ const ReverseProduction = () => {
     }
     setFinalProductFinancials(fProductFinancials)
 
-    // 中間素材
+    // 中間生産品
     // 生産・消費量
-    const middleMaterial = finalConsumptionVol.filter(item => Object.keys(productData).includes(item[0] as string));
-    const middleMaterialInfo = middleMaterial.map(([material, monthly, yearly]) => {
-      const factoryName = productData[material].factory[0];
-      const productType = productData[material].alias[0] || material;
+    const middleProducts = finalConsumptionVol.filter(item => Object.keys(productData).includes(item[0] as string));
+    const middleProductInfo = middleProducts.map(([product, monthly, yearly]) => {
+      const factoryName = productData[product].factory[0];
+      const productType = productData[product].alias[0] || product;
       const pVol = getProductionVolume(factoryData[factoryName].products, productType)
       const obj: MiddleProductionData = {
         factoryName: factoryName,
-        factories: productData[material].factory,
+        factories: productData[product].factory,
         productType: productType,
-        productAlias: productData[material].alias.length ? productData[material].alias :  material,
-        productName: material,
+        productAlias: productData[product].alias.length ? productData[product].alias :  product,
+        productName: product,
         monthlyRequired: Number(monthly),
         yearlyRequired: Number(yearly),
         monthlyMax: pVol[0][1],
@@ -117,10 +123,10 @@ const ReverseProduction = () => {
       }
       return obj;
     })
-    setMiddleProductionInfo(middleMaterialInfo)
-    setMiddleProduction(getMiddleProductionData(middleMaterialInfo))
+    setMiddleProductionInfo(middleProductInfo)
+    setMiddleProduction(getMiddleProductionData(middleProductInfo))
     // 売上・コスト
-    const MProductFinancials = middleMaterialInfo.map((item) => {
+    const MProductFinancials = middleProductInfo.map((item) => {
       const sellingData = sellingPriceDataJSON.filter((e) => e.name === item.productName)
       const sales = Math.round(sellingData[0].maxPrice * item.yearlyRequired / 1000 * multiplier);
       const cost = factoryData[item.factoryName].products[item.productType].costPerMonth * 12;
@@ -134,24 +140,40 @@ const ReverseProduction = () => {
     })
     setMiddleProductFinancials(MProductFinancials)
 
+    // 原材料(加工を必要としないもの)
+    // 売上
+    const middleProductNames = middleProducts.map(item => (item[0]))
+    const materials = finalConsumptionVol.filter(item => !middleProductNames.includes(item[0]))
+    const materialF: MaterialFinancials[] = materials.map(item => {
+      const sellingData = sellingPriceDataJSON.filter((e) => e.name === item[0])
+      return {
+        materialName: item[0],
+        yearlyMaxSales: Math.round(sellingData[0].maxPrice * item[2] / 1000 * multiplier),
+      }
+    })
+    setMaterialFinancials(materialF)
+
+    // 中間生産品 + 素材売上
+    setMaterialProfitSum(getMaterialProfitSum(MProductFinancials, materialF))
+    
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [factoryData, productData, productType.length, selectedFactory, selectedProduct, selectedProductType, multiplier])
 
 
-  const getMiddleProductionData = (middleMaterialInfo: MiddleProductionData[]) => {
-    const middleProductionVol = middleMaterialInfo.map((info, ) => {
-      const materialName = info.productType;
-      return [[materialName, info.monthlyRequired, info.yearlyRequired]] as VolumeInfo[];
+  const getMiddleProductionData = (middleProductInfo: MiddleProductionData[]) => {
+    const middleProductionVol = middleProductInfo.map((info, ) => {
+      const productName = info.productType;
+      return [[productName, info.monthlyRequired, info.yearlyRequired]] as VolumeInfo[];
     })
-    const middleConsumptionVol = middleMaterialInfo.map((info, ) => {
-      const materialName = info.productType;
-      return getRequiredMaterials(factoryData[info.factoryName].products, materialName as string, info.monthlyRequired)
+    const middleConsumptionVol = middleProductInfo.map((info, ) => {
+      const productName = info.productType;
+      return getRequiredMaterials(factoryData[info.factoryName].products, productName as string, info.monthlyRequired)
     })
     const middleProd = middleProductionVol.map((e, i) => [e, middleConsumptionVol[i]]);
     return middleProd;
   }
-  const getMiddleProductFinancials = (middleMaterialInfo: MiddleProductionData[]) => {
-    const financials = middleMaterialInfo.map((item) => {
+  const getMiddleProductFinancials = (middleProductInfo: MiddleProductionData[]) => {
+    const financials = middleProductInfo.map((item) => {
       const sellingData = sellingPriceDataJSON.filter((e) => e.name === item.productName)
       const sales = Math.round(sellingData[0].maxPrice * item.yearlyRequired / 1000  * multiplier);
       const cost = factoryData[item.factoryName].products[item.productType].costPerMonth * 12;
@@ -165,6 +187,12 @@ const ReverseProduction = () => {
     })
     return financials;
   }
+  const getMaterialProfitSum = (middleProdF: ProductFinancials[], materialF: MaterialFinancials[]) => {
+    const middleProdProfit = middleProdF.reduce((sum, item) => sum + item.yearlyProfit, 0);
+    const materialProfit = materialF.reduce((sum, item) => sum + item.yearlyMaxSales, 0)
+    return middleProdProfit + materialProfit;
+  }
+
 
 
   const handleChangeDifficulty = (difficulty: string) => {
@@ -190,6 +218,10 @@ const ReverseProduction = () => {
       setSelectedProduct("");
       setSelectedProductType("");
       setSelectedFactory("");
+      setFinalConsumptionVolume([]);
+      setFinalProductionVolume([]);
+      setMaterialFinancials([]);
+      setMaterialProfitSum(0);
       return;
     }
     if (product !== selectedProduct) {
@@ -223,9 +255,11 @@ const ReverseProduction = () => {
       }
       return item;
     });
-    setMiddleProductFinancials(getMiddleProductFinancials(updatedInfo))
+    const middleProdF = getMiddleProductFinancials(updatedInfo);
+    setMiddleProductFinancials(middleProdF)
     setMiddleProduction(getMiddleProductionData(updatedInfo))
     setMiddleProductionInfo(updatedInfo)
+    setMaterialProfitSum(getMaterialProfitSum(middleProdF, materialFinancials))
   }
   const handleChangeMiddleProductType = (i: number, newProductType: string) => {
     const updatedInfo = middleProductionInfo.map((item, j) => {
@@ -242,9 +276,11 @@ const ReverseProduction = () => {
       }
       return item;
     });
-    setMiddleProductFinancials(getMiddleProductFinancials(updatedInfo))
+    const middleProdF = getMiddleProductFinancials(updatedInfo)
+    setMiddleProductFinancials(middleProdF)
     setMiddleProduction(getMiddleProductionData(updatedInfo))
     setMiddleProductionInfo(updatedInfo)
+    setMaterialProfitSum(getMaterialProfitSum(middleProdF, materialFinancials))
   }
 
   return (
@@ -402,7 +438,8 @@ const ReverseProduction = () => {
           </tr>
         </ProductProfitTable>
       </ProductProfitWrapper>}
-      <ProductProfitWrapper $title='中間生産品' $style={{marginBottom:"2em"}}>
+      {middleProductionInfo.length > 0 && 
+        <ProductProfitWrapper $title='中間生産品' $style={{marginBottom:"2em"}}>
         <ProductProfitTable>
           {middleProductFinancials.map((item, i) => (
             <tr key={`middle-product-financials-${item.productName}-${i}`}>
@@ -423,26 +460,52 @@ const ReverseProduction = () => {
             </td>
           </tr>
         </ProductProfitTable>
-      </ProductProfitWrapper>
+      </ProductProfitWrapper>}
+      {materialFinancials.length > 0 &&
+        <ProductProfitWrapper $title='原材料' $style={{marginBottom:"2em"}}>
+        <ProductProfitTable>
+          {materialFinancials.map((item, i) => (
+            <tr key={`middle-product-financials-${item.materialName}-${i}`}>
+              <th>{item.materialName}</th>
+              <td>{item.yearlyMaxSales.toLocaleString()}</td>
+              <td>-</td>
+              <td>{item.yearlyMaxSales.toLocaleString()}</td>
+            </tr>
+          ))}
+          <tr>
+            <td style={{backgroundColor: 'transparent'}}></td>
+            <td style={{backgroundColor: 'transparent'}}></td>
+            <td style={{backgroundColor: 'transparent', textAlign: "right", paddingRight: "1em"}}>
+              計
+            </td>
+            <td style={{backgroundColor: 'transparent'}}>
+              {materialFinancials.reduce((sum, item) => sum + item.yearlyMaxSales, 0).toLocaleString()}
+            </td>
+          </tr>
+        </ProductProfitTable>
+      </ProductProfitWrapper>}
+      
       {finalProductFinancials &&
       <ProductProfitWrapper $title='売上比較' $style={{marginBottom:"4em"}}>
           <CompareWrapper>
-          <GraphBarWrapper $num={1}>
+          <GraphBarWrapper $num={1} $marginBottom={"1em"}>
             <h5>素材合計売値</h5>
-            <GraphBar $width={middleProductFinancials.reduce((sum, item) => sum + item.yearlyProfit, 0)/finalProductFinancials.yearlyProfit*100}></GraphBar>
-            <p>&euro;{middleProductFinancials.reduce((sum, item) => sum + item.yearlyProfit, 0).toLocaleString()}</p>
+            <GraphBar 
+              $width={materialProfitSum/finalProductFinancials.yearlyProfit*100}>
+            </GraphBar>
+            <p>&euro;{materialProfitSum.toLocaleString()}</p>
           </GraphBarWrapper>
           <TransitionWrapper>
             <img src="img/arrow_to_bottom.svg" alt="" />
             <p>
-              {(finalProductFinancials.yearlyProfit-middleProductFinancials.reduce((sum, item) => sum + item.yearlyProfit, 0)) > 0 ?
+              {(finalProductFinancials.yearlyProfit-materialProfitSum) > 0 ?
                <span>+</span>:<span>- </span>}&thinsp;
-              &euro;{(finalProductFinancials.yearlyProfit-middleProductFinancials.reduce((sum, item) => sum + item.yearlyProfit, 0)).toLocaleString()}
+              &euro;{(finalProductFinancials.yearlyProfit-materialProfitSum).toLocaleString()}
             </p>
           </TransitionWrapper>
           <GraphBarWrapper $num={3}>
             <h5>最終生産品売値</h5>
-            <GraphBar></GraphBar>
+            <GraphBar $width={100}></GraphBar>
             <p>&euro;{finalProductFinancials.yearlyProfit.toLocaleString()}</p>
           </GraphBarWrapper>
         </CompareWrapper>
@@ -477,12 +540,12 @@ const TableCategoryTitle = styled.h3`
 const CompareWrapper = styled.div`
   width: 100%;
   display: grid;
-  grid-template-rows: 1fr auto 1fr;
   margin-top: 1em;
   padding: 0 1em;
 `
-const GraphBarWrapper = styled.div<{$num: number}>`
+const GraphBarWrapper = styled.div<{$num: number, $marginBottom?: string}>`
   width: 100%;
+  margin-bottom: ${({$marginBottom}) => $marginBottom ? $marginBottom : 0};
   grid-row: ${({$num}) => `${$num}/${$num+1}`};
   grid-column: 1 / 2;
   display: flex;
@@ -509,14 +572,13 @@ const TransitionWrapper = styled.div`
 const GraphBar = styled.div<{$width?: number}>`
   width: 80%;
   height: 2em;
-  // background-color: #eee;
   position: relative;
   &::after {
     content: "";
     position: absolute;
     top: 0;
     left: 0;
-    width: ${({$width}) => $width ? `${$width}%`: "100%"};
+    width: ${({$width}) => $width ? `${$width}%`: "1%"};
     height: 100%;
     background-color: rgb(57, 200, 0);
     border-radius: 5px;
