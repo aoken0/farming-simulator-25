@@ -1,4 +1,12 @@
-export type Item = {
+export type RawSellingPrice = {
+  name: string,
+  reading: string,
+  maxPrice: number,
+  minPrice: number,
+  maxMonths: number[],
+  type: string,
+}
+export type SellingPrice = {
   name: string,
   reading: string,
   maxPrice: number,

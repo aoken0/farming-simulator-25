@@ -1,9 +1,8 @@
 "use client";
 import styled from "styled-components";
 import { useEffect, useState } from "react";
-import data from '../../../public/data/selling_price.json'
-import { formatMonths } from "../utils/formatMonths";
-import { Item } from "@/utils/type";
+import sellingPriceDataJSON from '../../../public/data/selling_price.json'
+import { formatSellingPriceData } from "@/utils/format";
 import { sortBy } from "../utils/sort";
 import GlobalWrapper from "@/components/GlobalWrapper"
 import ContentTitle from "@/components/ContentTitle";
@@ -13,21 +12,16 @@ import MenuTable from "@/components/MenuTable";
 import MenuTableTr from "@/components/MenuTableTr";
 import MenuTableTrSelect from "@/components/MenuTableTrSelect";
 import Small from "@/components/Small";
+import type { SellingPrice } from "@/utils/type";
 
 const SellingPrice = () => {
-  const [sellingPrices, setSellingPrices] = useState<Item[]>([]);
+  const [sellingPriceData, setSellingPriceData] = useState<SellingPrice[]>([]);
   const [sortMode, setSortMode] = useState<string>("");
   const [isReverse, setIsReverse] = useState<boolean>(false);
   const [multiplier, setMultiplier] = useState<number>(0.6);
 
   useEffect(() => {
-    const tmp = data
-      .filter(item => item.type !== "extra")
-      .map((item) => ({
-        ...item,
-        maxMonthLabel: formatMonths(item.maxMonths),
-      }))
-    setSellingPrices(tmp);
+    setSellingPriceData(formatSellingPriceData(sellingPriceDataJSON));
   }, [])
 
   const handleChangeDifficulty = (difficulty: string) => {
@@ -56,7 +50,7 @@ const SellingPrice = () => {
       reverse = !reverse
       setIsReverse(reverse)
     }
-    setSellingPrices(sortBy(sellingPrices, mode, reverse))
+    setSellingPriceData(sortBy(sellingPriceData, mode, reverse))
   }
 
   return (
@@ -86,7 +80,7 @@ const SellingPrice = () => {
           <td onClick={() => handleClick("highest", isReverse)}>最高値[&euro;] {sortMode == "highest" && <Arrow $isReverse={isReverse}>&#9660;</Arrow>}</td>
           <td onClick={() => handleClick("lowest", isReverse)}>最安値[&euro;] {sortMode == "lowest" && <Arrow $isReverse={isReverse}>&#9660;</Arrow>}</td>
         </TableHeader>
-        {sellingPrices.map((item, index) => (
+        {sellingPriceData.map((item, index) => (
           <tr key={`tr_${index}`}>
             <th key={`th_${index}`}>{item.name}</th>
             <MonthLabel key={`td0_${index}`}>{item.maxMonthLabel}</MonthLabel>

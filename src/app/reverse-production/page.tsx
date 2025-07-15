@@ -1,5 +1,6 @@
 "use client";
 import React from 'react';
+import type { Product, Factory, SellingPrice } from '@/utils/type';
 import { useState, useEffect } from 'react';
 import ContentTitle from "@/components/ContentTitle";
 import GlobalWrapper from "@/components/GlobalWrapper"
@@ -9,8 +10,9 @@ import MenuTableTrSelect from "@/components/MenuTableTrSelect";
 import productDataJSON from '../../../public/data/product.json';
 import factoryDataJSON from '../../../public/data/factory.json';
 import sellingPriceDataJSON from '../../../public/data/selling_price.json';
-import { Product, Factory } from '@/utils/type';
-import { VolumeInfo, getProductionVolume, getConsumption, getRequiredMaterials } from '@/utils/calc';
+import { VolumeInfo, getProductionVolume, getConsumption } from '@/utils/calc';
+import { formatSellingPriceData } from '@/utils/format';
+import { getMiddleProductFinancials, getMaterialSummary, getMaterialProfitSum, getMiddleProductionData } from './utils/getter';
 import Small from '@/components/Small';
 import ProductInfoWrapper from '@/components/ProductInfoWrapper';
 import ProductExportInfoTable from '@/components/ProductExportInfoTable';
@@ -23,8 +25,9 @@ import ProductProfitWrapper from '@/components/ProductProfitWrapper';
 import ProductProfitTable from '@/components/ProductProfitTable';
 import ProductMaterialSummaryWrapper from '@/components/ProductMaterialSummaryWrapper';
 import ProductMaterialSummaryTable from '@/components/ProductMaterialSummaryTable';
+import ContentUL from '@/components/ContentUL';
 
-type MiddleProductionInfo = {
+export type MiddleProductionInfo = {
   factoryName: string,
   factories: string[],
   productType: string,
@@ -35,17 +38,17 @@ type MiddleProductionInfo = {
   monthlyMax: number,
   yearlyMax: number,
 }
-type ProductFinancials = {
+export type ProductFinancials = {
   productName: string,
   yearlyMaxSales: number,
   yearlyCost: number,
   yearlyProfit: number,
 }
-type MaterialFinancials = {
+export type MaterialFinancials = {
   materialName: string,
   yearlyMaxSales: number,
 }
-type MaterialSummary = {
+export type MaterialSummary = {
   materialName: string,
   monthlyRequired: number,
   yearlyRequired: number,
@@ -56,6 +59,7 @@ type MaterialSummary = {
 
 const ReverseProduction = () => {
   const [showTable, setShowTable] = useState<boolean>(false);
+  const [sellingPriceData, setSellingPriceData] = useState<SellingPrice[]>([]);
   const [productData, setProductData] = useState<Product>({});
   const [productType, setProductType] = useState<string[]>([]);
   const [factoryData, setFactoryData] = useState<Factory>({});
@@ -83,7 +87,7 @@ const ReverseProduction = () => {
     const sortedFactoryData = Object.fromEntries(
       Object.entries(factoryDataJSON).sort(([a], [b]) => a.localeCompare(b, 'ja'))
     );
-
+    setSellingPriceData(formatSellingPriceData(sellingPriceDataJSON));
     setProductData(sortedProductData);
     setFactoryData(sortedFactoryData);
   },[])
@@ -135,7 +139,7 @@ const ReverseProduction = () => {
       return obj;
     })
     setMiddleProductionInfo(middleProdInfo)
-    const middleProdData = getMiddleProductionData(middleProdInfo)
+    const middleProdData = getMiddleProductionData(factoryData, middleProdInfo)
     setMiddleProduction(middleProdData)
     // 売上・コスト
     const MProductFinancials = middleProdInfo.map((item) => {
@@ -173,75 +177,6 @@ const ReverseProduction = () => {
   
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [productType.length, selectedFactory, selectedProduct, selectedProductType, multiplier])
-
-
-  const getMiddleProductionData = (middleProductInfo: MiddleProductionInfo[]) => {
-    const middleProductionVol = middleProductInfo.map((info, ) => {
-      const productName = info.productType;
-      return [[productName, info.monthlyRequired, info.yearlyRequired]] as VolumeInfo[];
-    })
-    const middleConsumptionVol = middleProductInfo.map((info, ) => {
-      const productName = info.productType;
-      return getRequiredMaterials(factoryData[info.factoryName].products, productName as string, info.monthlyRequired)
-    })
-    const middleProd = middleProductionVol.map((e, i) => [e, middleConsumptionVol[i]]);
-    return middleProd;
-  }
-  const getMiddleProductFinancials = (middleProductInfo: MiddleProductionInfo[]) => {
-    const financials = middleProductInfo.map((item) => {
-      const sellingData = sellingPriceDataJSON.filter((e) => e.name === item.productName)
-      const sales = Math.round(sellingData[0].maxPrice * item.yearlyRequired / 1000  * multiplier);
-      const cost = factoryData[item.factoryName].products[item.productType].costPerMonth * 12;
-      const finances: ProductFinancials = {
-        productName: item.productName,
-        yearlyMaxSales: sales,
-        yearlyCost: cost,
-        yearlyProfit: sales - cost,
-      }
-      return finances
-    })
-    return financials;
-  }
-  const getMaterialProfitSum = (middleProdF: ProductFinancials[], materialF: MaterialFinancials[]) => {
-    const middleProdProfit = middleProdF.reduce((sum, item) => sum + item.yearlyProfit, 0);
-    const materialProfit = materialF.reduce((sum, item) => sum + item.yearlyMaxSales, 0)
-    return middleProdProfit + materialProfit;
-  }
-  const getMaterialSummary = (middleProdData: VolumeInfo[][][], middleProdInfo: MiddleProductionInfo[]) => {
-    const m = middleProdData.map((items, i) => {
-      const output = items[0][0];
-      const factoryName = middleProdInfo[i].factoryName;
-      const inputs = items[1].map(item => {
-        const obj: MaterialSummary = {
-          materialName: item[0],
-          monthlyRequired: item[1],
-          yearlyRequired: item[2],
-          factoryName: factoryName,
-          productType: output[0],
-          numOfSameMaterial: 0,
-        }
-        return obj
-      })
-      return inputs
-    }).flat();
-    const countM = m.reduce<Record<string, number>>((acc, item) => {
-      acc[item.materialName] = (acc[item.materialName] || 0) + 1;
-      return acc;
-    }, {});
-    const updatedM = m.map((item) => ({
-      ...item,
-      numOfSameMaterial: countM[item.materialName]
-    }));
-    const sortedM = updatedM.sort((a, b) => {
-      const nameComp = a.materialName.localeCompare(b.materialName, 'ja');
-      if (nameComp !== 0) return nameComp;
-      return a.factoryName.localeCompare(b.factoryName, 'ja');
-    })
-
-    return sortedM
-  }
-
-
 
   const handleChangeDifficulty = (difficulty: string) => {
     switch (difficulty) {
@@ -304,8 +239,8 @@ const ReverseProduction = () => {
       }
       return item;
     });
-    const middleProdF = getMiddleProductFinancials(updatedInfo);
-    const middleProdData = getMiddleProductionData(updatedInfo)
+    const middleProdF = getMiddleProductFinancials(factoryData, updatedInfo, sellingPriceData, multiplier);
+    const middleProdData = getMiddleProductionData(factoryData, updatedInfo)
     setMiddleProductFinancials(middleProdF)
     setMiddleProduction(middleProdData)
     setMiddleProductionInfo(updatedInfo)
@@ -327,8 +262,8 @@ const ReverseProduction = () => {
       }
       return item;
     });
-    const middleProdF = getMiddleProductFinancials(updatedInfo)
-    const middleProdData = getMiddleProductionData(updatedInfo)
+    const middleProdF = getMiddleProductFinancials(factoryData, updatedInfo, sellingPriceData, multiplier)
+    const middleProdData = getMiddleProductionData(factoryData, updatedInfo)
     setMiddleProductFinancials(middleProdF)
     setMiddleProduction(middleProdData)
     setMiddleProductionInfo(updatedInfo)
@@ -342,8 +277,12 @@ const ReverseProduction = () => {
       <ContentParagraph>
         <ContentP>
           生産品と施設を選択することで、必要な素材量や利益がわかります。<br />
-          また、中間工程
+          また、中間工程がある場合、以下の項目を変更できます。
         </ContentP>
+        <ContentUL>
+          <li>工場...例) 乳業工場（大）/ 乳業工場（小）</li>
+          <li>生産タイプ...例) バター（牛乳）/ バター（ヤギ乳）/ バター（水牛のミルク）</li>
+        </ContentUL>
       </ContentParagraph>
       <MenuTable $marginBottom='0.5em'>
         <MenuTableTr $label="難易度">

@@ -1,3 +1,15 @@
+import { RawSellingPrice, SellingPrice } from "./type"
+
+export const formatSellingPriceData = (sellingPrice: RawSellingPrice[]): SellingPrice[] => {
+  const formattedSellingPrice = sellingPrice
+    .filter(item => item.type !== "extra")
+    .map((item) => ({
+      ...item,
+      maxMonthLabel: formatMonths(item.maxMonths),
+    }))
+  return formattedSellingPrice
+}
+
 export const formatMonths = (months: number[]) => {
   if (months.length == 1) return `${months}月`;
   const sorted = [...months].sort((a, b) => a - b);

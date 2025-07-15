@@ -1,6 +1,6 @@
-import { Item } from "@/utils/type"; 
+import { SellingPrice } from "@/utils/type"; 
 
-export const sortBy = (data: Item[], type: string, reverse?: boolean) : Item[] => {
+export const sortBy = (data: SellingPrice[], type: string, reverse?: boolean) : SellingPrice[] => {
   let sortedData = data;
   switch (type) {
     case "highest":
