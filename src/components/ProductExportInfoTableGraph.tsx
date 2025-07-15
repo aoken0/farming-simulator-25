@@ -36,7 +36,7 @@ const ProductExportInfoTableGraph: React.FC<Props> = ({children, $monthlyCapacit
           {children}
           <td colSpan={2}>
             <GraphWrapper>
-              <Graph $cur={operatingRate}></Graph>
+              <Graph $width={operatingRate}></Graph>
               <GraphP>{operatingRate.toFixed(1)}%</GraphP>
             </GraphWrapper>
           </td>
@@ -114,7 +114,7 @@ const GraphWrapper = styled.div`
   align-items: center;
   padding: 0 1em;
 `
-const Graph = styled.div<{$cur: number}>`
+const Graph = styled.div<{$width: number}>`
   width: 80%;
   height: 1em;
   background-color: #fff;
@@ -122,11 +122,11 @@ const Graph = styled.div<{$cur: number}>`
   &::after {
     position: absolute;
     content: "";
-    width: ${({$cur}) => $cur}%;
+    width: ${({$width}) => Math.min($width, 100)}%;
     height: 100%;
     top: 0;
     left: 0;
-    background-color: ${({$cur}) => getColorByPercentage($cur)};
+    background-color: ${({$width}) => getColorByPercentage($width)};
     transition: width 0.5s ease-out;
   }
 `
