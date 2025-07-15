@@ -428,7 +428,7 @@ const ReverseProduction = () => {
       <Small>※ 金額の単位は、すべて&euro; / 小数点以下四捨五入</Small>
       <TableCategoryTitle>利益</TableCategoryTitle>
       {finalProductFinancials &&
-      <ProductProfitWrapper $title='最終生産品' $style={{marginBottom:"2em"}}>
+      <ProductProfitWrapper $title='最終生産品' $style={{marginBottom:"1em"}}>
         <ProductProfitTable>
           <tr>
             <th>{finalProductFinancials.productName}</th>
@@ -439,7 +439,7 @@ const ReverseProduction = () => {
         </ProductProfitTable>
       </ProductProfitWrapper>}
       {middleProductionInfo.length > 0 && 
-        <ProductProfitWrapper $title='中間生産品' $style={{marginBottom:"2em"}}>
+        <ProductProfitWrapper $title='中間生産品' $style={{marginBottom:"0.5em"}}>
         <ProductProfitTable>
           {middleProductFinancials.map((item, i) => (
             <tr key={`middle-product-financials-${item.productName}-${i}`}>
@@ -462,7 +462,7 @@ const ReverseProduction = () => {
         </ProductProfitTable>
       </ProductProfitWrapper>}
       {materialFinancials.length > 0 &&
-        <ProductProfitWrapper $title='原材料' $style={{marginBottom:"2em"}}>
+        <ProductProfitWrapper $title='原材料' $style={{marginBottom:"0.5em"}}>
         <ProductProfitTable>
           {materialFinancials.map((item, i) => (
             <tr key={`middle-product-financials-${item.materialName}-${i}`}>
@@ -484,11 +484,10 @@ const ReverseProduction = () => {
           </tr>
         </ProductProfitTable>
       </ProductProfitWrapper>}
-      
       {finalProductFinancials &&
       <ProductProfitWrapper $title='売上比較' $style={{marginBottom:"4em"}}>
-          <CompareWrapper>
-          <GraphBarWrapper $num={1} $marginBottom={"1em"}>
+        <CompareWrapper>
+          <GraphBarWrapper $num={1} $marginBottom={"1.5em"}>
             <h5>素材合計売値</h5>
             <GraphBar 
               $width={materialProfitSum/finalProductFinancials.yearlyProfit*100}>
@@ -540,8 +539,7 @@ const TableCategoryTitle = styled.h3`
 const CompareWrapper = styled.div`
   width: 100%;
   display: grid;
-  margin-top: 1em;
-  padding: 0 1em;
+  padding: 0 0.5em;
 `
 const GraphBarWrapper = styled.div<{$num: number, $marginBottom?: string}>`
   width: 100%;

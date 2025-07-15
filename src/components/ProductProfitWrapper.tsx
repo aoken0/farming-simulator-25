@@ -24,7 +24,17 @@ const Wrapper = styled.div`
 `
 const Title = styled.h3`
   width: 100%;
-  background-color: #aaaaaa !important;
+  background-color: transparent !important;
   padding-left: 1em;
   line-height: 2.4em;
+  position: relative;
+  &::before {
+    position: absolute;
+    content: "▼";
+    top: 32%;
+    left: 0;
+    transform: rotate(-90deg) translateX(100%);
+    font-size: 12px;
+    color: #444;
+  }
 `
