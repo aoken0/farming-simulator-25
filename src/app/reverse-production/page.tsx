@@ -433,7 +433,7 @@ const ReverseProduction = () => {
             <p>&euro;{middleProductFinancials.reduce((sum, item) => sum + item.yearlyProfit, 0).toLocaleString()}</p>
           </GraphBarWrapper>
           <TransitionWrapper>
-            <img src="/arrow_to_bottom.svg" alt="" />
+            <img src="img/arrow_to_bottom.svg" alt="" />
             <p>
               {(finalProductFinancials.yearlyProfit-middleProductFinancials.reduce((sum, item) => sum + item.yearlyProfit, 0)) > 0 ?
                <span>+</span>:<span>- </span>}&thinsp;
