@@ -830,5 +830,13 @@
     "minPrice": 5823,
     "maxMonths": [9,10],
     "type": "others"
+  },
+  {
+    "name": "水",
+    "reading": "みず",
+    "maxPrice": 0,
+    "minPrice": 0,
+    "maxMonths": [],
+    "type": "extra"
   }
 ]
