@@ -1,5 +1,6 @@
 "use client";
 import React from 'react';
+import type { Product, Factory, SellingPrice } from '@/utils/type';
 import { useState, useEffect } from 'react';
 import ContentTitle from "@/components/ContentTitle";
 import GlobalWrapper from "@/components/GlobalWrapper"
@@ -9,8 +10,9 @@ import MenuTableTrSelect from "@/components/MenuTableTrSelect";
 import productDataJSON from '../../../public/data/product.json';
 import factoryDataJSON from '../../../public/data/factory.json';
 import sellingPriceDataJSON from '../../../public/data/selling_price.json';
-import { Product, Factory } from '@/utils/type';
-import { VolumeInfo, getProductionVolume, getConsumption, getRequiredMaterials } from '@/utils/calc';
+import { VolumeInfo, getProductionVolume, getConsumption } from '@/utils/calc';
+import { formatSellingPriceData } from '@/utils/format';
+import { getMiddleProductFinancials, getMaterialSummary, getMaterialProfitSum, getMiddleProductionData } from './utils/getter';
 import Small from '@/components/Small';
 import ProductInfoWrapper from '@/components/ProductInfoWrapper';
 import ProductExportInfoTable from '@/components/ProductExportInfoTable';
@@ -21,8 +23,11 @@ import ContentParagraph from '@/components/ContentParagraph';
 import ContentP from '@/components/ContentP';
 import ProductProfitWrapper from '@/components/ProductProfitWrapper';
 import ProductProfitTable from '@/components/ProductProfitTable';
+import ProductMaterialSummaryWrapper from '@/components/ProductMaterialSummaryWrapper';
+import ProductMaterialSummaryTable from '@/components/ProductMaterialSummaryTable';
+import ContentUL from '@/components/ContentUL';
 
-type MiddleProductionData = {
+export type MiddleProductionInfo = {
   factoryName: string,
   factories: string[],
   productType: string,
@@ -33,15 +38,28 @@ type MiddleProductionData = {
   monthlyMax: number,
   yearlyMax: number,
 }
-type ProductFinancials = {
+export type ProductFinancials = {
   productName: string,
   yearlyMaxSales: number,
   yearlyCost: number,
   yearlyProfit: number,
 }
+export type MaterialFinancials = {
+  materialName: string,
+  yearlyMaxSales: number,
+}
+export type MaterialSummary = {
+  materialName: string,
+  monthlyRequired: number,
+  yearlyRequired: number,
+  factoryName: string,
+  productType: string,
+  numOfSameMaterial: number,
+}
 
 const ReverseProduction = () => {
   const [showTable, setShowTable] = useState<boolean>(false);
+  const [sellingPriceData, setSellingPriceData] = useState<SellingPrice[]>([]);
   const [productData, setProductData] = useState<Product>({});
   const [productType, setProductType] = useState<string[]>([]);
   const [factoryData, setFactoryData] = useState<Factory>({});
@@ -54,8 +72,11 @@ const ReverseProduction = () => {
   const [finalProductFinancials, setFinalProductFinancials] = useState<ProductFinancials>();
   const [middleProductFinancials, setMiddleProductFinancials] = useState<ProductFinancials[]>([]);
   const [middleProduction, setMiddleProduction] = useState<VolumeInfo[][][]>([]);
-  const [middleProductionInfo, setMiddleProductionInfo] = useState<MiddleProductionData[]>([]);
+  const [middleProductionInfo, setMiddleProductionInfo] = useState<MiddleProductionInfo[]>([]);
+  const [materialFinancials, setMaterialFinancials] = useState<MaterialFinancials[]>([]);
+  const [materialProfitSum, setMaterialProfitSum] = useState<number>(0);
   const [multiplier, setMultiplier] = useState<number>(0.6);
+  const [materialSummary, setMaterialSummary] = useState<MaterialSummary[]>([]);
 
   useEffect(() => {
     const sortedProductData = Object.fromEntries(
@@ -66,7 +87,7 @@ const ReverseProduction = () => {
     const sortedFactoryData = Object.fromEntries(
       Object.entries(factoryDataJSON).sort(([a], [b]) => a.localeCompare(b, 'ja'))
     );
-
+    setSellingPriceData(formatSellingPriceData(sellingPriceDataJSON));
     setProductData(sortedProductData);
     setFactoryData(sortedFactoryData);
   },[])
@@ -97,19 +118,19 @@ const ReverseProduction = () => {
     }
     setFinalProductFinancials(fProductFinancials)
 
-    // 中間素材
+    // 中間生産品
     // 生産・消費量
-    const middleMaterial = finalConsumptionVol.filter(item => Object.keys(productData).includes(item[0] as string));
-    const middleMaterialInfo = middleMaterial.map(([material, monthly, yearly]) => {
-      const factoryName = productData[material].factory[0];
-      const productType = productData[material].alias[0] || material;
+    const middleProducts = finalConsumptionVol.filter(item => Object.keys(productData).includes(item[0] as string));
+    const middleProdInfo = middleProducts.map(([product, monthly, yearly]) => {
+      const factoryName = productData[product].factory[0];
+      const productType = productData[product].alias[0] || product;
       const pVol = getProductionVolume(factoryData[factoryName].products, productType)
-      const obj: MiddleProductionData = {
+      const obj: MiddleProductionInfo = {
         factoryName: factoryName,
-        factories: productData[material].factory,
+        factories: productData[product].factory,
         productType: productType,
-        productAlias: productData[material].alias.length ? productData[material].alias :  material,
-        productName: material,
+        productAlias: productData[product].alias.length ? productData[product].alias :  product,
+        productName: product,
         monthlyRequired: Number(monthly),
         yearlyRequired: Number(yearly),
         monthlyMax: pVol[0][1],
@@ -117,10 +138,11 @@ const ReverseProduction = () => {
       }
       return obj;
     })
-    setMiddleProductionInfo(middleMaterialInfo)
-    setMiddleProduction(getMiddleProductionData(middleMaterialInfo))
+    setMiddleProductionInfo(middleProdInfo)
+    const middleProdData = getMiddleProductionData(factoryData, middleProdInfo)
+    setMiddleProduction(middleProdData)
     // 売上・コスト
-    const MProductFinancials = middleMaterialInfo.map((item) => {
+    const MProductFinancials = middleProdInfo.map((item) => {
       const sellingData = sellingPriceDataJSON.filter((e) => e.name === item.productName)
       const sales = Math.round(sellingData[0].maxPrice * item.yearlyRequired / 1000 * multiplier);
       const cost = factoryData[item.factoryName].products[item.productType].costPerMonth * 12;
@@ -134,38 +156,37 @@ const ReverseProduction = () => {
     })
     setMiddleProductFinancials(MProductFinancials)
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [factoryData, productData, productType.length, selectedFactory, selectedProduct, selectedProductType, multiplier])
-
-
-  const getMiddleProductionData = (middleMaterialInfo: MiddleProductionData[]) => {
-    const middleProductionVol = middleMaterialInfo.map((info, ) => {
-      const materialName = info.productType;
-      return [[materialName, info.monthlyRequired, info.yearlyRequired]] as VolumeInfo[];
-    })
-    const middleConsumptionVol = middleMaterialInfo.map((info, ) => {
-      const materialName = info.productType;
-      return getRequiredMaterials(factoryData[info.factoryName].products, materialName as string, info.monthlyRequired)
-    })
-    const middleProd = middleProductionVol.map((e, i) => [e, middleConsumptionVol[i]]);
-    return middleProd;
-  }
-  const getMiddleProductFinancials = (middleMaterialInfo: MiddleProductionData[]) => {
-    const financials = middleMaterialInfo.map((item) => {
-      const sellingData = sellingPriceDataJSON.filter((e) => e.name === item.productName)
-      const sales = Math.round(sellingData[0].maxPrice * item.yearlyRequired / 1000  * multiplier);
-      const cost = factoryData[item.factoryName].products[item.productType].costPerMonth * 12;
-      const finances: ProductFinancials = {
-        productName: item.productName,
-        yearlyMaxSales: sales,
-        yearlyCost: cost,
-        yearlyProfit: sales - cost,
+    // 原材料(加工を必要としないもの)
+    // 売上
+    const middleProductNames = middleProducts.map(item => (item[0]))
+    const materials = finalConsumptionVol.filter(item => !middleProductNames.includes(item[0]))
+    const materialF: MaterialFinancials[] = materials.map(item => {
+      const sellingData = sellingPriceDataJSON.filter((e) => e.name === item[0])
+      return {
+        materialName: item[0],
+        yearlyMaxSales: Math.round(sellingData[0].maxPrice * item[2] / 1000 * multiplier),
       }
-      return finances
     })
-    return financials;
-  }
+    setMaterialFinancials(materialF)
 
+    // 中間生産品 + 素材売上
+    setMaterialProfitSum(getMaterialProfitSum(MProductFinancials, materialF))
+    // 原材料まとめ
+    setMaterialSummary(getMaterialSummary(middleProdData, middleProdInfo))
+  
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [productType.length, selectedFactory, selectedProduct, selectedProductType, multiplier])
+
+
+  useEffect(() => {
+    const middleProdF = getMiddleProductFinancials(factoryData, middleProductionInfo, sellingPriceData, multiplier);
+    const middleProdData = getMiddleProductionData(factoryData, middleProductionInfo)
+    setMiddleProductFinancials(middleProdF)
+    setMiddleProduction(middleProdData)
+    setMaterialProfitSum(getMaterialProfitSum(middleProdF, materialFinancials))
+    setMaterialSummary(getMaterialSummary(middleProdData, middleProductionInfo))
+  }, [factoryData, materialFinancials, middleProductionInfo, multiplier, sellingPriceData])
+  
 
   const handleChangeDifficulty = (difficulty: string) => {
     switch (difficulty) {
@@ -190,6 +211,11 @@ const ReverseProduction = () => {
       setSelectedProduct("");
       setSelectedProductType("");
       setSelectedFactory("");
+      setFinalConsumptionVolume([]);
+      setFinalProductionVolume([]);
+      setMaterialFinancials([]);
+      setMaterialProfitSum(0);
+      setMaterialSummary([]);
       return;
     }
     if (product !== selectedProduct) {
@@ -223,8 +249,6 @@ const ReverseProduction = () => {
       }
       return item;
     });
-    setMiddleProductFinancials(getMiddleProductFinancials(updatedInfo))
-    setMiddleProduction(getMiddleProductionData(updatedInfo))
     setMiddleProductionInfo(updatedInfo)
   }
   const handleChangeMiddleProductType = (i: number, newProductType: string) => {
@@ -242,8 +266,6 @@ const ReverseProduction = () => {
       }
       return item;
     });
-    setMiddleProductFinancials(getMiddleProductFinancials(updatedInfo))
-    setMiddleProduction(getMiddleProductionData(updatedInfo))
     setMiddleProductionInfo(updatedInfo)
   }
 
@@ -252,8 +274,13 @@ const ReverseProduction = () => {
       <ContentTitle>材料逆引きツール</ContentTitle>
       <ContentParagraph>
         <ContentP>
-          生産品と施設を選択することで、必要な素材量や利益がわかります。
+          生産品と施設を選択することで、必要な素材量や利益がわかります。<br />
+          また、中間工程がある場合、以下の項目を変更できます。
         </ContentP>
+        <ContentUL>
+          <li>工場...例) 乳業工場（大）/ 乳業工場（小）</li>
+          <li>生産タイプ...例) バター（牛乳）/ バター（ヤギ乳）/ バター（水牛のミルク）</li>
+        </ContentUL>
       </ContentParagraph>
       <MenuTable $marginBottom='0.5em'>
         <MenuTableTr $label="難易度">
@@ -304,10 +331,10 @@ const ReverseProduction = () => {
       </MenuTable>
       {showTable &&
       <>
-      <Small>※ 量の単位はすべて&#08467; / 小数点以下切り上げ</Small>
       {/* ============================== 
         最終工程表示領域
       ================================== */}
+      <Small>※ 量の単位はすべて&#08467; / 小数点以下切り上げ</Small>
       <TableCategoryTitle>最終工程</TableCategoryTitle>
       <ProductInfoWrapper $factoryName={selectedFactory}  $style={{marginBottom:"4em"}}>
         <ProductExportInfoTable>
@@ -392,7 +419,7 @@ const ReverseProduction = () => {
       <Small>※ 金額の単位は、すべて&euro; / 小数点以下四捨五入</Small>
       <TableCategoryTitle>利益</TableCategoryTitle>
       {finalProductFinancials &&
-      <ProductProfitWrapper $title='最終生産品' $style={{marginBottom:"2em"}}>
+      <ProductProfitWrapper $title='最終生産品' $style={{marginBottom:"1em"}}>
         <ProductProfitTable>
           <tr>
             <th>{finalProductFinancials.productName}</th>
@@ -402,7 +429,8 @@ const ReverseProduction = () => {
           </tr>
         </ProductProfitTable>
       </ProductProfitWrapper>}
-      <ProductProfitWrapper $title='中間生産品' $style={{marginBottom:"2em"}}>
+      {middleProductionInfo.length > 0 && 
+        <ProductProfitWrapper $title='中間生産品' $style={{marginBottom:"0.5em"}}>
         <ProductProfitTable>
           {middleProductFinancials.map((item, i) => (
             <tr key={`middle-product-financials-${item.productName}-${i}`}>
@@ -423,30 +451,81 @@ const ReverseProduction = () => {
             </td>
           </tr>
         </ProductProfitTable>
-      </ProductProfitWrapper>
+      </ProductProfitWrapper>}
+      {materialFinancials.length > 0 &&
+        <ProductProfitWrapper $title='その他' $style={{marginBottom:"0.5em"}}>
+        <ProductProfitTable>
+          {materialFinancials.map((item, i) => (
+            <tr key={`middle-product-financials-${item.materialName}-${i}`}>
+              <th>{item.materialName}</th>
+              <td>{item.yearlyMaxSales.toLocaleString()}</td>
+              <td>-</td>
+              <td>{item.yearlyMaxSales.toLocaleString()}</td>
+            </tr>
+          ))}
+          <tr>
+            <td style={{backgroundColor: 'transparent'}}></td>
+            <td style={{backgroundColor: 'transparent'}}></td>
+            <td style={{backgroundColor: 'transparent', textAlign: "right", paddingRight: "1em"}}>
+              計
+            </td>
+            <td style={{backgroundColor: 'transparent'}}>
+              {materialFinancials.reduce((sum, item) => sum + item.yearlyMaxSales, 0).toLocaleString()}
+            </td>
+          </tr>
+        </ProductProfitTable>
+      </ProductProfitWrapper>}
       {finalProductFinancials &&
-      <ProductProfitWrapper $title='売上比較' $style={{marginBottom:"4em"}}>
-          <CompareWrapper>
-          <GraphBarWrapper $num={1}>
+      <ProductProfitWrapper $title='売上比較' $style={{marginBottom:"6em"}}>
+        <CompareWrapper>
+          <GraphBarWrapper $num={1} $marginBottom={"1.5em"}>
             <h5>素材合計売値</h5>
-            <GraphBar $width={middleProductFinancials.reduce((sum, item) => sum + item.yearlyProfit, 0)/finalProductFinancials.yearlyProfit*100}></GraphBar>
-            <p>&euro;{middleProductFinancials.reduce((sum, item) => sum + item.yearlyProfit, 0).toLocaleString()}</p>
+            <GraphBar 
+              $width={materialProfitSum/finalProductFinancials.yearlyProfit*100}>
+            </GraphBar>
+            <p>&euro;{materialProfitSum.toLocaleString()}</p>
           </GraphBarWrapper>
           <TransitionWrapper>
             <img src="img/arrow_to_bottom.svg" alt="" />
             <p>
-              {(finalProductFinancials.yearlyProfit-middleProductFinancials.reduce((sum, item) => sum + item.yearlyProfit, 0)) > 0 ?
+              {(finalProductFinancials.yearlyProfit-materialProfitSum) > 0 ?
                <span>+</span>:<span>- </span>}&thinsp;
-              &euro;{(finalProductFinancials.yearlyProfit-middleProductFinancials.reduce((sum, item) => sum + item.yearlyProfit, 0)).toLocaleString()}
+              &euro;{(finalProductFinancials.yearlyProfit-materialProfitSum).toLocaleString()}
             </p>
           </TransitionWrapper>
           <GraphBarWrapper $num={3}>
             <h5>最終生産品売値</h5>
-            <GraphBar></GraphBar>
+            <GraphBar $width={100}></GraphBar>
             <p>&euro;{finalProductFinancials.yearlyProfit.toLocaleString()}</p>
           </GraphBarWrapper>
         </CompareWrapper>
       </ProductProfitWrapper>}
+
+
+      {/* ============================== 
+        まとめ
+      ================================== */}
+      <Small>※ 量の単位はすべて&#08467; / 小数点以下切り上げ</Small>
+      <TableCategoryTitle>まとめ</TableCategoryTitle>
+      <ProductMaterialSummaryWrapper $title='必要原材料'>
+        <ProductMaterialSummaryTable>
+          {materialSummary.map((item, i) => (
+            <tr key={`material-summary-${item}-${i}`}>
+              {item.numOfSameMaterial > 1 ?
+              i > 0 && item.materialName !== materialSummary[i-1].materialName && <th rowSpan={2}>{item.materialName}</th>
+              :
+              <th>{item.materialName}</th>
+              }
+              <td>{item.monthlyRequired}</td>
+              <td>{item.yearlyRequired}</td>
+              <td style={{backgroundColor: 'transparent'}}>→</td>
+              <td>{item.factoryName}</td>
+              <td>{item.productType}</td>
+            </tr>
+          ))}
+        </ProductMaterialSummaryTable>
+      </ProductMaterialSummaryWrapper>
+      
       </>
       }
     </GlobalWrapper>
@@ -477,12 +556,11 @@ const TableCategoryTitle = styled.h3`
 const CompareWrapper = styled.div`
   width: 100%;
   display: grid;
-  grid-template-rows: 1fr auto 1fr;
-  margin-top: 1em;
-  padding: 0 1em;
+  padding: 0 0.5em;
 `
-const GraphBarWrapper = styled.div<{$num: number}>`
+const GraphBarWrapper = styled.div<{$num: number, $marginBottom?: string}>`
   width: 100%;
+  margin-bottom: ${({$marginBottom}) => $marginBottom ? $marginBottom : 0};
   grid-row: ${({$num}) => `${$num}/${$num+1}`};
   grid-column: 1 / 2;
   display: flex;
@@ -509,14 +587,13 @@ const TransitionWrapper = styled.div`
 const GraphBar = styled.div<{$width?: number}>`
   width: 80%;
   height: 2em;
-  // background-color: #eee;
   position: relative;
   &::after {
     content: "";
     position: absolute;
     top: 0;
     left: 0;
-    width: ${({$width}) => $width ? `${$width}%`: "100%"};
+    width: ${({$width}) => $width ? `${$width}%`: "1%"};
     height: 100%;
     background-color: rgb(57, 200, 0);
     border-radius: 5px;

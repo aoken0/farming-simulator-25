@@ -6,7 +6,7 @@ type Props = {
   children: React.ReactNode,
 }
 
-const ProductProfitWrapper: React.FC<Props> = ({$title, children, $style}) => {
+const ProductMaterialSummarizeWrapper: React.FC<Props> = ({$title, children, $style}) => {
   return (
     <Wrapper style={$style}>
       <Title>{$title}</Title>
@@ -15,7 +15,7 @@ const ProductProfitWrapper: React.FC<Props> = ({$title, children, $style}) => {
   )
 }
 
-export default ProductProfitWrapper
+export default ProductMaterialSummarizeWrapper
 
 const Wrapper = styled.div`
   width: 100%;  
