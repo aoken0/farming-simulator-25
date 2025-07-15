@@ -476,7 +476,7 @@ const ReverseProduction = () => {
         </ProductProfitTable>
       </ProductProfitWrapper>}
       {finalProductFinancials &&
-      <ProductProfitWrapper $title='売上比較' $style={{marginBottom:"6em"}}>
+      <ProductProfitWrapper $title='売上比較' $style={{marginBottom:"4em"}}>
         <CompareWrapper>
           <GraphBarWrapper $num={1} $marginBottom={"1.5em"}>
             <h5>素材合計売値</h5>
