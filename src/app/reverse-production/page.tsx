@@ -171,12 +171,22 @@ const ReverseProduction = () => {
 
     // 中間生産品 + 素材売上
     setMaterialProfitSum(getMaterialProfitSum(MProductFinancials, materialF))
-
     // 原材料まとめ
     setMaterialSummary(getMaterialSummary(middleProdData, middleProdInfo))
   
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [productType.length, selectedFactory, selectedProduct, selectedProductType, multiplier])
+
+
+  useEffect(() => {
+    const middleProdF = getMiddleProductFinancials(factoryData, middleProductionInfo, sellingPriceData, multiplier);
+    const middleProdData = getMiddleProductionData(factoryData, middleProductionInfo)
+    setMiddleProductFinancials(middleProdF)
+    setMiddleProduction(middleProdData)
+    setMaterialProfitSum(getMaterialProfitSum(middleProdF, materialFinancials))
+    setMaterialSummary(getMaterialSummary(middleProdData, middleProductionInfo))
+  }, [factoryData, materialFinancials, middleProductionInfo, multiplier, sellingPriceData])
+  
 
   const handleChangeDifficulty = (difficulty: string) => {
     switch (difficulty) {
@@ -239,13 +249,7 @@ const ReverseProduction = () => {
       }
       return item;
     });
-    const middleProdF = getMiddleProductFinancials(factoryData, updatedInfo, sellingPriceData, multiplier);
-    const middleProdData = getMiddleProductionData(factoryData, updatedInfo)
-    setMiddleProductFinancials(middleProdF)
-    setMiddleProduction(middleProdData)
     setMiddleProductionInfo(updatedInfo)
-    setMaterialProfitSum(getMaterialProfitSum(middleProdF, materialFinancials))
-    setMaterialSummary(getMaterialSummary(middleProdData, updatedInfo))
   }
   const handleChangeMiddleProductType = (i: number, newProductType: string) => {
     const updatedInfo = middleProductionInfo.map((item, j) => {
@@ -262,13 +266,7 @@ const ReverseProduction = () => {
       }
       return item;
     });
-    const middleProdF = getMiddleProductFinancials(factoryData, updatedInfo, sellingPriceData, multiplier)
-    const middleProdData = getMiddleProductionData(factoryData, updatedInfo)
-    setMiddleProductFinancials(middleProdF)
-    setMiddleProduction(middleProdData)
     setMiddleProductionInfo(updatedInfo)
-    setMaterialProfitSum(getMaterialProfitSum(middleProdF, materialFinancials))
-    setMaterialSummary(getMaterialSummary(middleProdData, updatedInfo))
   }
 
   return (
