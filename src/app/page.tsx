@@ -5,7 +5,7 @@ import GlobalWrapper from "@/components/GlobalWrapper";
 const Home = () => {
   return (
     <GlobalWrapper>
-      a
+      準備中...
     </GlobalWrapper>
   );
 }
