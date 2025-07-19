@@ -7,3 +7,10 @@
 | イージー | 1 |
 | ノーマル | 3/5 |
 | ハード | 1/3 |
+
+
+## パッケージ
+```
+yarn add styled-components
+yarn add framer-motion
+```

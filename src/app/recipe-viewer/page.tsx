@@ -250,7 +250,7 @@ const ReverseProduction = () => {
 
   return (
     <GlobalWrapper>
-      <ContentTitle>材料逆引きツール</ContentTitle>
+      <ContentTitle>材料検索</ContentTitle>
       <ContentParagraph>
         <ContentP>
           生産品と施設を選択することで、必要な素材量や利益がわかります。<br />
@@ -409,7 +409,7 @@ const ReverseProduction = () => {
         </ProductProfitTable>
       </ProductProfitWrapper>}
       {middleProductionInfo.length > 0 && 
-        <ProductProfitWrapper $title='中間生産品' $style={{marginBottom:"0.5em"}}>
+        <ProductProfitWrapper $title='原材料 - 中間生産品' $style={{marginBottom:"0.5em"}}>
         <ProductProfitTable>
           {middleProductFinancials.map((item, i) => (
             <tr key={`middle-product-financials-${item.productName}-${i}`}>
@@ -432,7 +432,7 @@ const ReverseProduction = () => {
         </ProductProfitTable>
       </ProductProfitWrapper>}
       {materialFinancials.length > 0 &&
-        <ProductProfitWrapper $title='その他' $style={{marginBottom:"0.5em"}}>
+        <ProductProfitWrapper $title='原材料 - その他' $style={{marginBottom:"0.5em"}}>
         <ProductProfitTable>
           {materialFinancials.map((item, i) => (
             <tr key={`middle-product-financials-${item.materialName}-${i}`}>
@@ -465,7 +465,7 @@ const ReverseProduction = () => {
             <p>&euro;{materialProfitSum.toLocaleString()}</p>
           </GraphBarWrapper>
           <TransitionWrapper>
-            <img src="img/arrow_to_bottom.svg" alt="" />
+            <img src="/img/arrow_to_bottom.svg" alt="" />
             <p>
               {(finalProductFinancials.yearlyProfit-materialProfitSum) > 0 ?
                <span>+</span>:<span>- </span>}&thinsp;
@@ -486,7 +486,7 @@ const ReverseProduction = () => {
       ================================== */}
       <Small>※ 量の単位はすべて&#08467; / 小数点以下切り上げ</Small>
       <TableCategoryTitle>まとめ</TableCategoryTitle>
-      <ProductMaterialSummaryWrapper $title='必要原材料'>
+      <ProductMaterialSummaryWrapper $title='必要原材料一覧'>
         <ProductMaterialSummaryTable>
           {materialSummary.map((item, i) => (
             <tr key={`material-summary-${item}-${i}`}>
@@ -506,8 +506,8 @@ const ReverseProduction = () => {
               : 
               <>
                 <td style={{backgroundColor: 'transparent'}}></td>
-                <td style={{backgroundColor: 'transparent'}}></td>
-                <td style={{backgroundColor: 'transparent'}}></td>
+                <td style={{backgroundColor: 'transparent'}}>-</td>
+                <td style={{backgroundColor: 'transparent'}}>-</td>
               </>
               }
               
