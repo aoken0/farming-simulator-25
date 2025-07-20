@@ -4,12 +4,13 @@ import { notoSansJP } from "@/utils/font"
 import HamburgerButton from "./HamburgerButton"
 import { useState, useEffect } from "react"
 import { useWindowSize } from "@/utils/hooks/useWindowSize"
+import { BREAKPOINTS } from "@/constants/breakpoint"
 
 type Props = {
   children: React.ReactNode
 }
 
-const BREAKPOINT_S = 520;
+const BREAKPOINT_S = BREAKPOINTS.S;
 
 const GlobalWrapper: React.FC<Props> = ({children}) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);

@@ -1,6 +1,9 @@
 import styled from "styled-components"
 import { SetStateAction } from "react"
 import { motion } from "framer-motion"
+import { BREAKPOINTS } from "@/constants/breakpoint"
+
+const BREAKPOINT_S = BREAKPOINTS.S
 
 type Props = {
   isOpen: boolean;
@@ -68,6 +71,10 @@ const Button = styled.div`
   gap: 6px;
   border-radius: 3px;
   margin-top: -6px;
+  display: none;
+  @media screen and (max-width: ${BREAKPOINT_S}px) {
+    display: block;
+  }
   span {
     display: block;
     width: 24px;
