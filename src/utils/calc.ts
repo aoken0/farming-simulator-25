@@ -39,8 +39,8 @@ export const getRequiredMaterials = (productionInfo: ProductionInfo, productName
   const outputs = Object.entries(productionInfo[productName].output)
   // const cyclePerMonth = productionInfo[productName].cyclePerMonth;
 
-  const volumeInfo = inputs.map(([key, amount], i) => {
-    const changeRate = amount / outputs[i][1]; // 製品を1としたときの材料費
+  const volumeInfo = inputs.map(([key, amount], ) => {
+    const changeRate = amount / outputs[0][1]; // 製品を1としたときの材料費
     const requiredPerMonth = monthlyProductionVolume * changeRate;
     return [key, Math.ceil(requiredPerMonth), Math.ceil(requiredPerMonth*12)] as VolumeInfo;
   })

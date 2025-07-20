@@ -1,4 +1,4 @@
-import { MiddleProductionInfo, ProductFinancials, MaterialSummary, MaterialFinancials } from "../page";
+import { MiddleProductionInfo, ProductFinancials, MaterialSummary, MaterialFinancials } from "./type";
 import { VolumeInfo, getRequiredMaterials } from "@/utils/calc";
 import type { Factory, SellingPrice } from "@/utils/type";
 
@@ -36,8 +36,8 @@ export const getMaterialProfitSum = (middleProdF: ProductFinancials[], materialF
   const materialProfit = materialF.reduce((sum, item) => sum + item.yearlyMaxSales, 0)
   return middleProdProfit + materialProfit;
 }
-export const getMaterialSummary = (middleProdData: VolumeInfo[][][], middleProdInfo: MiddleProductionInfo[]) => {
-  const m = middleProdData.map((items, i) => {
+export const getMaterialSummary = (middleProdData: VolumeInfo[][][], middleProdInfo: MiddleProductionInfo[], otherMaterials: VolumeInfo[]): MaterialSummary[] => {
+  const m: MaterialSummary[] = middleProdData.map((items, i) => {
     const output = items[0][0];
     const factoryName = middleProdInfo[i].factoryName;
     const inputs = items[1].map(item => {
@@ -53,19 +53,33 @@ export const getMaterialSummary = (middleProdData: VolumeInfo[][][], middleProdI
     })
     return inputs
   }).flat();
+
+  const extraM: MaterialSummary[] = otherMaterials.map(([key, monthly, yearly]) => {
+    const obj: MaterialSummary = {
+      materialName: key,
+      monthlyRequired: monthly,
+      yearlyRequired: yearly,
+      factoryName: "",
+      productType: "",
+      numOfSameMaterial: 0
+    }
+    return obj
+  })
+  
   const countM = m.reduce<Record<string, number>>((acc, item) => {
     acc[item.materialName] = (acc[item.materialName] || 0) + 1;
     return acc;
   }, {});
-  const updatedM = m.map((item) => ({
+  const updatedM: MaterialSummary[] = m.map((item) => ({
     ...item,
     numOfSameMaterial: countM[item.materialName]
   }));
-  const sortedM = updatedM.sort((a, b) => {
+  const sortedM: MaterialSummary[] = updatedM.sort((a, b) => {
     const nameComp = a.materialName.localeCompare(b.materialName, 'ja');
     if (nameComp !== 0) return nameComp;
     return a.factoryName.localeCompare(b.factoryName, 'ja');
   })
 
+  sortedM.push(...extraM)
   return sortedM
 }

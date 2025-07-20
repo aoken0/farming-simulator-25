@@ -12,7 +12,7 @@ import factoryDataJSON from '../../../public/data/factory.json';
 import sellingPriceDataJSON from '../../../public/data/selling_price.json';
 import { VolumeInfo, getProductionVolume, getConsumption } from '@/utils/calc';
 import { formatSellingPriceData } from '@/utils/format';
-import { getMiddleProductFinancials, getMaterialSummary, getMaterialProfitSum, getMiddleProductionData } from './utils/getter';
+import { getMiddleProductFinancials, getMaterialSummary, getMaterialProfitSum, getMiddleProductionData } from './utils/calc';
 import Small from '@/components/Small';
 import ProductInfoWrapper from '@/components/ProductInfoWrapper';
 import ProductExportInfoTable from '@/components/ProductExportInfoTable';
@@ -26,36 +26,7 @@ import ProductProfitTable from '@/components/ProductProfitTable';
 import ProductMaterialSummaryWrapper from '@/components/ProductMaterialSummaryWrapper';
 import ProductMaterialSummaryTable from '@/components/ProductMaterialSummaryTable';
 import ContentUL from '@/components/ContentUL';
-
-export type MiddleProductionInfo = {
-  factoryName: string,
-  factories: string[],
-  productType: string,
-  productAlias: string | string[],
-  productName: string,
-  monthlyRequired: number,
-  yearlyRequired: number,
-  monthlyMax: number,
-  yearlyMax: number,
-}
-export type ProductFinancials = {
-  productName: string,
-  yearlyMaxSales: number,
-  yearlyCost: number,
-  yearlyProfit: number,
-}
-export type MaterialFinancials = {
-  materialName: string,
-  yearlyMaxSales: number,
-}
-export type MaterialSummary = {
-  materialName: string,
-  monthlyRequired: number,
-  yearlyRequired: number,
-  factoryName: string,
-  productType: string,
-  numOfSameMaterial: number,
-}
+import type { MiddleProductionInfo, ProductFinancials, MaterialFinancials, MaterialSummary } from './utils/type';
 
 const ReverseProduction = () => {
   const [showTable, setShowTable] = useState<boolean>(false);
@@ -164,6 +135,8 @@ const ReverseProduction = () => {
       const sellingData = sellingPriceDataJSON.filter((e) => e.name === item[0])
       return {
         materialName: item[0],
+        monthlyRequired: item[1],
+        yearlyRequired: item[2],
         yearlyMaxSales: Math.round(sellingData[0].maxPrice * item[2] / 1000 * multiplier),
       }
     })
@@ -172,7 +145,10 @@ const ReverseProduction = () => {
     // 中間生産品 + 素材売上
     setMaterialProfitSum(getMaterialProfitSum(MProductFinancials, materialF))
     // 原材料まとめ
-    setMaterialSummary(getMaterialSummary(middleProdData, middleProdInfo))
+    const m: VolumeInfo[] = materialF.map(item => {
+      return [item.materialName, item.monthlyRequired, item.yearlyRequired]
+    })
+    setMaterialSummary(getMaterialSummary(middleProdData, middleProdInfo, m))
   
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [productType.length, selectedFactory, selectedProduct, selectedProductType, multiplier])
@@ -184,7 +160,10 @@ const ReverseProduction = () => {
     setMiddleProductFinancials(middleProdF)
     setMiddleProduction(middleProdData)
     setMaterialProfitSum(getMaterialProfitSum(middleProdF, materialFinancials))
-    setMaterialSummary(getMaterialSummary(middleProdData, middleProductionInfo))
+    const m: VolumeInfo[] = materialFinancials.map(item => {
+      return [item.materialName, item.monthlyRequired, item.yearlyRequired]
+    })
+    setMaterialSummary(getMaterialSummary(middleProdData, middleProductionInfo, m))
   }, [factoryData, materialFinancials, middleProductionInfo, multiplier, sellingPriceData])
   
 
@@ -271,7 +250,7 @@ const ReverseProduction = () => {
 
   return (
     <GlobalWrapper>
-      <ContentTitle>材料逆引きツール</ContentTitle>
+      <ContentTitle>材料検索</ContentTitle>
       <ContentParagraph>
         <ContentP>
           生産品と施設を選択することで、必要な素材量や利益がわかります。<br />
@@ -430,7 +409,7 @@ const ReverseProduction = () => {
         </ProductProfitTable>
       </ProductProfitWrapper>}
       {middleProductionInfo.length > 0 && 
-        <ProductProfitWrapper $title='中間生産品' $style={{marginBottom:"0.5em"}}>
+        <ProductProfitWrapper $title='原材料 - 中間生産品' $style={{marginBottom:"0.5em"}}>
         <ProductProfitTable>
           {middleProductFinancials.map((item, i) => (
             <tr key={`middle-product-financials-${item.productName}-${i}`}>
@@ -453,7 +432,7 @@ const ReverseProduction = () => {
         </ProductProfitTable>
       </ProductProfitWrapper>}
       {materialFinancials.length > 0 &&
-        <ProductProfitWrapper $title='その他' $style={{marginBottom:"0.5em"}}>
+        <ProductProfitWrapper $title='原材料 - その他' $style={{marginBottom:"0.5em"}}>
         <ProductProfitTable>
           {materialFinancials.map((item, i) => (
             <tr key={`middle-product-financials-${item.materialName}-${i}`}>
@@ -486,7 +465,7 @@ const ReverseProduction = () => {
             <p>&euro;{materialProfitSum.toLocaleString()}</p>
           </GraphBarWrapper>
           <TransitionWrapper>
-            <img src="img/arrow_to_bottom.svg" alt="" />
+            <img src="/img/arrow_to_bottom.svg" alt="" />
             <p>
               {(finalProductFinancials.yearlyProfit-materialProfitSum) > 0 ?
                <span>+</span>:<span>- </span>}&thinsp;
@@ -507,7 +486,7 @@ const ReverseProduction = () => {
       ================================== */}
       <Small>※ 量の単位はすべて&#08467; / 小数点以下切り上げ</Small>
       <TableCategoryTitle>まとめ</TableCategoryTitle>
-      <ProductMaterialSummaryWrapper $title='必要原材料'>
+      <ProductMaterialSummaryWrapper $title='必要原材料一覧'>
         <ProductMaterialSummaryTable>
           {materialSummary.map((item, i) => (
             <tr key={`material-summary-${item}-${i}`}>
@@ -518,9 +497,20 @@ const ReverseProduction = () => {
               }
               <td>{item.monthlyRequired}</td>
               <td>{item.yearlyRequired}</td>
-              <td style={{backgroundColor: 'transparent'}}>→</td>
-              <td>{item.factoryName}</td>
-              <td>{item.productType}</td>
+              {item.factoryName ? 
+              <>
+                <td style={{backgroundColor: 'transparent'}}>→</td>
+                <td>{item.factoryName}</td>
+                <td>{item.productType}</td>
+              </>
+              : 
+              <>
+                <td style={{backgroundColor: 'transparent'}}></td>
+                <td style={{backgroundColor: 'transparent'}}>-</td>
+                <td style={{backgroundColor: 'transparent'}}>-</td>
+              </>
+              }
+              
             </tr>
           ))}
         </ProductMaterialSummaryTable>
