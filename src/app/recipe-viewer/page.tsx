@@ -1,6 +1,7 @@
 "use client";
 import React from 'react';
-import type { Product, Factory, SellingPrice } from '@/utils/type';
+import type { Product, Factory, SellingPrice, ProductAlias } from '@/utils/type';
+import type { MiddleProductionInfo, ProductFinancials, MaterialFinancials, MaterialSummary } from './utils/type';
 import { useState, useEffect } from 'react';
 import ContentTitle from "@/components/ContentTitle";
 import GlobalWrapper from "@/components/GlobalWrapper"
@@ -9,6 +10,7 @@ import MenuTableTr from "@/components/MenuTableTr";
 import MenuTableTrSelect from "@/components/MenuTableTrSelect";
 import productDataJSON from '../../../public/data/product.json';
 import factoryDataJSON from '../../../public/data/factory.json';
+import productAliasJSON from '../../../public/data/alias_map.json';
 import sellingPriceDataJSON from '../../../public/data/selling_price.json';
 import { VolumeInfo, getProductionVolume, getConsumption } from '@/utils/calc';
 import { formatSellingPriceData } from '@/utils/format';
@@ -26,15 +28,18 @@ import ProductProfitTable from '@/components/ProductProfitTable';
 import ProductMaterialSummaryWrapper from '@/components/ProductMaterialSummaryWrapper';
 import ProductMaterialSummaryTable from '@/components/ProductMaterialSummaryTable';
 import ContentUL from '@/components/ContentUL';
-import type { MiddleProductionInfo, ProductFinancials, MaterialFinancials, MaterialSummary } from './utils/type';
+
+const productAliasMap: ProductAlias = productAliasJSON;
 
 const ReverseProduction = () => {
   const [showTable, setShowTable] = useState<boolean>(false);
   const [sellingPriceData, setSellingPriceData] = useState<SellingPrice[]>([]);
+  const [searchType, setSearchType] = useState<string>("search-by-product");
   const [productData, setProductData] = useState<Product>({});
+  const [productChoices, setProductChoices] = useState<Product>({});
   const [productType, setProductType] = useState<string[]>([]);
   const [factoryData, setFactoryData] = useState<Factory>({});
-  const [factories, setFactories] = useState<string[]>([]);
+  const [factoryChoices, setFactoryChoices] = useState<string[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<string>("");
   const [selectedProductType, setSelectedProductType] = useState<string>("");
   const [selectedFactory, setSelectedFactory] = useState<string>("");
@@ -60,7 +65,9 @@ const ReverseProduction = () => {
     );
     setSellingPriceData(formatSellingPriceData(sellingPriceDataJSON));
     setProductData(sortedProductData);
+    setProductChoices(sortedProductData);
     setFactoryData(sortedFactoryData);
+    // setFactoryChoices(Object.keys(sortedFactoryData))
   },[])
 
   useEffect(() => {
@@ -183,33 +190,102 @@ const ReverseProduction = () => {
         break;
     }
   }
+  const initializeStateData = () => {
+    setProductType([]);
+    setProductChoices({});
+    setFactoryChoices([]);
+    setSelectedProduct("");
+    setSelectedProductType("");
+    setSelectedFactory("");
+    setFinalConsumptionVolume([]);
+    setFinalProductionVolume([]);
+    setMaterialFinancials([]);
+    setMaterialProfitSum(0);
+    setMaterialSummary([]);
+  }
   const handleChangeProduct = (product: string) => {
-    if (!product) {
-      setProductType([]);
-      setFactories([]);
-      setSelectedProduct("");
-      setSelectedProductType("");
-      setSelectedFactory("");
-      setFinalConsumptionVolume([]);
-      setFinalProductionVolume([]);
-      setMaterialFinancials([]);
-      setMaterialProfitSum(0);
-      setMaterialSummary([]);
-      return;
+    switch (searchType) {
+      case "search-by-product":
+        if (!product) {
+          initializeStateData();
+          setProductChoices(productData);
+          return;
+        }
+        if (product !== selectedProduct) {
+          setSelectedProductType("");
+          setSelectedFactory("");
+        }
+        setSelectedProduct(product);
+        setProductType(productData[product].alias);
+        setFactoryChoices(productData[product].factory);
+        break;
+
+      case "search-by-factory":
+        setSelectedProduct(product);
+        setProductType(productData[product].alias);
+        break;
+    
+      default:
+        break;
     }
-    if (product !== selectedProduct) {
-      setSelectedProductType("");
-      setSelectedFactory("");
-    }
-    setSelectedProduct(product);
-    setProductType(productData[product].alias);
-    setFactories(productData[product].factory);
   }
   const handleChangeProductType = (productType: string) => {
     setSelectedProductType(productType);
   }
   const handleChangeFactory = (factory: string) => {
-    setSelectedFactory(factory);
+    switch (searchType) {
+      case "search-by-product":
+        setSelectedFactory(factory);
+        break;
+      
+      case "search-by-factory":
+        if (!factory) {
+          initializeStateData();
+          setFactoryChoices(Object.keys(factoryData))
+          return;
+        }
+        if (factory !== selectedFactory) {
+          setSelectedProduct("");
+          setSelectedProductType("");
+        }
+        setSelectedFactory(factory);
+        setProductChoices({});
+        const tmp = Object.entries(factoryData[factory].products).flatMap(([key]) => {
+          if (key in productAliasMap) {
+            const productName = productAliasMap[key]
+            return [[productName, productData[productName]]]
+          }
+          if (key in productData) {
+            return [[key, productData[key]]]
+          }
+          return []
+        })
+        const p: Product = Object.fromEntries(tmp)
+        setProductChoices(p)
+        break;
+    
+      default:
+        break;
+    }
+  }
+  const handleChangeSearchType = (searchType: string) => {
+  if (!searchType) return;
+  switch (searchType) {
+    case "search-by-product":
+      initializeStateData();
+      setProductChoices(productData)
+      setFactoryChoices([]);
+      break;
+    case "search-by-factory":
+      initializeStateData();
+      setProductChoices({});
+      setFactoryChoices(Object.keys(factoryData))
+      break;
+
+    default:
+      return;
+    }
+    setSearchType(searchType);
   }
 
 
@@ -261,6 +337,16 @@ const ReverseProduction = () => {
           <li>生産タイプ...例) バター（牛乳）/ バター（ヤギ乳）/ バター（水牛のミルク）</li>
         </ContentUL>
       </ContentParagraph>
+      <RadioSelector>
+        <div>
+          <input type="radio" id="search-by-product" name="search-type" value="search-by-product" onChange={(e) => handleChangeSearchType(e.target.value)} checked={searchType === "search-by-product"} />
+          <label htmlFor="search-by-product">生産品から検索</label>
+        </div>
+        <div>
+          <input type="radio" id="search-by-factory" name="search-type" value="search-by-factory" onChange={(e) => handleChangeSearchType(e.target.value)} />
+          <label htmlFor="search-by-factory">施設から検索</label>
+        </div>
+      </RadioSelector>
       <MenuTable $marginBottom='0.5em'>
         <MenuTableTr $label="難易度">
           <MenuTableTrSelect $name="difficulty" $defaultValue="normal" $onChange={(e) => handleChangeDifficulty(e.target.value)}>
@@ -274,10 +360,10 @@ const ReverseProduction = () => {
       </MenuTable>
       <MenuTable $marginBottom='0.5em'>
         <MenuTableTr $label="生産品">
-          <MenuTableTrSelect $name="product" $defaultValue="" $onChange={(e) => handleChangeProduct(e.target.value)}>
+          <MenuTableTrSelect $name="product" $defaultValue="" $onChange={(e) => handleChangeProduct(e.target.value)}  $disabled={Object.entries(productChoices).length ? false : true}>
             <>
-              <option value="">選択してください</option>
-              {Object.entries(productData).map(([key, ], i) => (
+              {Object.entries(productChoices).length ? <option value="">選択してください</option> : <option value="">---</option>}
+              {Object.entries(productChoices).map(([key, ], i) => (
                 <option key={`product-${i}`} value={key}>{key}</option>
               ))}
             </>
@@ -298,10 +384,10 @@ const ReverseProduction = () => {
       </MenuTable>
       <MenuTable $marginBottom='0.5em'>
         <MenuTableTr $label="施設">
-          <MenuTableTrSelect $name="factory" $value={selectedFactory} $onChange={(e) => handleChangeFactory(e.target.value)} $disabled={factories.length ? false : true}>
+          <MenuTableTrSelect $name="factory" $value={selectedFactory} $onChange={(e) => handleChangeFactory(e.target.value)} $disabled={factoryChoices.length ? false : true}>
             <>
-              {factories.length ? <option value="">選択してください</option> : <option value="">---</option>}
-              {factories.map((e, i) => (
+              {factoryChoices.length ? <option value="">選択してください</option> : <option value="">---</option>}
+              {factoryChoices.map((e, i) => (
                 <option key={`factory-${i}`} value={e}>{e}</option>
               ))}
             </>
@@ -541,6 +627,20 @@ const TableCategoryTitle = styled.h3`
     left: 0;
     transform: translateY(-50%);
     border-radius: 2px;
+  }
+`
+const RadioSelector = styled.form`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: start;
+  font-size: 0.5em;
+  line-height: 1.5;
+  input[type=radio] {
+    appearance: auto;
+    -webkit-appearance: auto;
+    margin-right: 0.5em;
   }
 `
 const CompareWrapper = styled.div`
