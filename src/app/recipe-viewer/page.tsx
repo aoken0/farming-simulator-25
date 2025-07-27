@@ -360,7 +360,7 @@ const ReverseProduction = () => {
       </MenuTable>
       <MenuTable $marginBottom='0.5em'>
         <MenuTableTr $label="生産品">
-          <MenuTableTrSelect $name="product" $defaultValue="" $onChange={(e) => handleChangeProduct(e.target.value)}  $disabled={Object.entries(productChoices).length ? false : true}>
+          <MenuTableTrSelect $name="product" $value={selectedProduct} $onChange={(e) => handleChangeProduct(e.target.value)}  $disabled={Object.entries(productChoices).length ? false : true}>
             <>
               {Object.entries(productChoices).length ? <option value="">選択してください</option> : <option value="">---</option>}
               {Object.entries(productChoices).map(([key, ], i) => (
