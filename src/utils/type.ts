@@ -43,3 +43,6 @@ export type Factory = {
     products: ProductionInfo,
   }
 }
+export type ProductAlias = {
+  [productType: string]: string,
+}
