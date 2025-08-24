@@ -1,40 +1,41 @@
 import styled from "styled-components"
 import Link from "next/link"
-import { notoSansJP } from "@/utils/font"
+import { bizUDPGothic } from "@/utils/font"
 import HamburgerButton from "./HamburgerButton"
 import { useState, useEffect } from "react"
 import { useWindowSize } from "@/utils/hooks/useWindowSize"
-import { BREAKPOINTS } from "@/constants/breakpoint"
+import { BREAKPOINT } from "@/constants/breakpoint"
+import { COLOR } from "@/utils/color"
 
 type Props = {
-  children: React.ReactNode
+  children: React.ReactNode,
+  $currentPage?: string,
 }
 
-const BREAKPOINT_S = BREAKPOINTS.S;
-
-const GlobalWrapper: React.FC<Props> = ({children}) => {
+const GlobalWrapper: React.FC<Props> = ({children, $currentPage}) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const windowSize = useWindowSize();
 
   useEffect(() => {
-    if (windowSize.width > BREAKPOINT_S) {
+    if (windowSize.width > BREAKPOINT.S) {
       setIsOpen(false)
     }
   }, [windowSize])
 
   return (
-    <Wrapper className={notoSansJP.className}>
+    <Wrapper className={bizUDPGothic.className}>
       <Header>
         <h1><Link href="/">Farming Simulator 25 Lab</Link></h1>
         <HamburgerButton isOpen={isOpen} setIsOpen={setIsOpen} $style={hamburgerBtnStyle} />
       </Header>
       <ContentWrapper>
         <SideCotent>
+          <h4>Menu</h4>
           {/* <h4>シミュレーター</h4>
           <p><Link href="/production-planner">生産計画ツール</Link></p> */}
-          <h4>生産</h4>
+          <h5>生産</h5>
           <p><Link href="/recipe-viewer">材料・工程</Link></p>
-          <h4>作物・生産物</h4>
+          <h5>作物・生産物</h5>
           <p><Link href="/selling-price">売値</Link></p>
         </SideCotent>
         {isOpen ?
@@ -49,6 +50,7 @@ const GlobalWrapper: React.FC<Props> = ({children}) => {
         </NavWrapper>
         :
         <MainContent>
+          <h1>{$currentPage || "トップページ"}</h1>
           {children}
         </MainContent>
         }
@@ -69,43 +71,49 @@ const hamburgerBtnStyle: React.CSSProperties = {
 
 const Wrapper = styled.div`
   width: 72%;
+  min-height: calc(100vh - 8px);
   padding-bottom: 1em;
-  margin: 0 auto;
+  border-radius: .2em;
+  margin: 4px auto;
+  border: 1px solid #ccc;
+  background-color: #fefefe;
   display: flex;
   flex-direction: column;
   justify-content: start;
   align-items: center;
   gap: 32px;
   font-size: 32px;
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: ${BREAKPOINT.M}) {
     width: 96%;
     font-size: 28px;
   }
-  @media screen and (max-width: ${BREAKPOINT_S}px) {
+  @media screen and (max-width: ${BREAKPOINT.S}px) {
     font-size: 24px;
     width: 100%;
+    margin: 0;
+    border-radius: 0;
+    border: 0;
   }
 `
 const Header = styled.header`
   width: 100%;
-  background-color: #444;
+  background-image: linear-gradient(0deg, ${COLOR.main2} 2%, ${COLOR.main1});
   padding: 0 1em;
+  border-radius: .2em .2em 0 0;
   position: relative;
-  @media screen and (max-width: 768px) {
-    width: 100vw;
-  }
-  @media screen and (max-width: ${BREAKPOINT_S}px) {
+  @media screen and (max-width: ${BREAKPOINT.S}px) {
     padding: 0;
+    border-radius: 0;
   }
   h1 {
     width: fit-content;
     color: white;
-    font-size: 1em;
+    font-size: max(.8em, 20px);
     line-height: 3em;
     cursor: pointer;
-    @media screen and (max-width: ${BREAKPOINT_S}px) {
+    @media screen and (max-width: ${BREAKPOINT.S}px) {
       width: 100%;
-      font-size: 20px;
+      font-size: 16px;
       padding-left: 16px;
     }
   }
@@ -113,39 +121,59 @@ const Header = styled.header`
 const ContentWrapper = styled.div`
   width: 100%;
   margin: 0 auto;
+  padding: 0 .8em;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: start;
   gap: 0.5em;
+  @media screen and (max-width: ${BREAKPOINT.S}px) {
+    padding: 0 .2em;
+  }
 `
 const SideCotent = styled.nav`
   width: 25%;
   min-width: 180px;
-  background-color: white;
-  box-shadow: 0 0 4px 1px #ddd;
-  @media screen and (max-width: ${BREAKPOINT_S}px) {
+  background-color: #fcfcfc;
+  @media screen and (max-width: ${BREAKPOINT.S}px) {
     display: none; 
   }
   h4 {
+    padding: 0 0.2em;
+    font-size: 0.5em;
+    line-height: 2em;
+    font-weight: bold;
+    background-color: #f9f9f9;
+    color: ${COLOR.main2};
+    border-bottom: 2px solid ${COLOR.main2};
+  }
+  h5 {
     padding: 0 0.5em;
-    font-size: 0.6em;
+    font-size: max(0.5em, 16px);
     font-weight: bold;
     line-height: 2em;
-    color: white;
-    background-color:rgb(0, 109, 24);
+    color: #151515;
+    background-color: #e5e5e5;
     cursor: default;
   }
   p {
-    font-size: 0.5em;
+    font-size: max(0.4em, 14px);
     line-height: 2em;
     cursor: pointer;
+    color: ${COLOR.link};
+    potision: relative;
+    &::before {
+      content: "・";
+      color: ${COLOR.text};
+      position: absolute;
+    }
     a {
-      padding: 0 0.5em;
+      padding: 0 .8em;
       display: inline-block;
       width: 100%;
+      transition: all .2s ease-in;
       &:hover {
-        background-color: #ccc;
+        background-color: #f0f0f0;
       }
     }
   }
@@ -153,11 +181,17 @@ const SideCotent = styled.nav`
 const MainContent = styled.div`
   width: 75%;
   padding: 0.4em;
+  padding-top: 0;
   background-color: white;
-  box-shadow: 0 0 4px 1px #ddd;
-  @media screen and (max-width: ${BREAKPOINT_S}px) {
+  @media screen and (max-width: ${BREAKPOINT.S}px) {
     width: 100%;
-    margin: 0 16px;
+  }
+  h1 {
+    font-size: max(.8em, 22px);
+    line-height: 1.5em;
+    padding-left: 0.2em;
+    border-bottom: 2px solid ${COLOR.main2};
+    margin-bottom: .5em;
   }
 `
 const NavWrapper = styled.nav`

@@ -329,8 +329,8 @@ const RecipeViewer = () => {
   }
 
   return (
-    <GlobalWrapper>
-      <ContentTitle>材料・工程検索</ContentTitle>
+    <GlobalWrapper $currentPage='材料・工程'>
+      <ContentTitle>検索ツール</ContentTitle>
       <ContentParagraph>
         <ContentP>
           生産品と施設を選択することで、必要な素材量や利益がわかります。<br />

@@ -54,7 +54,7 @@ const SellingPrice = () => {
   }
 
   return (
-    <GlobalWrapper>
+    <GlobalWrapper $currentPage="売値">
       <ContentTitle>売値一覧表</ContentTitle>
       <ContentParagraph>
         <ContentUL>

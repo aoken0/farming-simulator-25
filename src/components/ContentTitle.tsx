@@ -1,3 +1,4 @@
+import { COLOR } from "@/utils/color";
 import styled from "styled-components"
 
 type Props = {
@@ -16,11 +17,11 @@ export default ContentTitle
 
 const Wrapper = styled.div`
   width: 100%;
-  color: white;
+  color: ${COLOR.text};
   font-size: 0.6em;
   font-weight: bold;
   line-height: 2em;
   padding-left: 1em;
   margin-bottom: 1em;
-  background-color: rgb(0, 109, 24);
+  background-color: #e5e5e5;
 `
