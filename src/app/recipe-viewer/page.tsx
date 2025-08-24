@@ -82,10 +82,14 @@ const ReverseProduction = () => {
     const product = selectedProductType ? selectedProductType : selectedProduct;
     const finalProductionVol = getProductionVolume(factoryData[factory].products, product)
     const finalConsumptionVol = getConsumption(factoryData[factory].products, product)
+    console.log(finalProductionVol)
+    console.log(finalConsumptionVol)
     setFinalProductionVolume(finalProductionVol);
     setFinalConsumptionVolume(finalConsumptionVol);
     // 売上・コスト
-    const finalProductSellingData = sellingPriceDataJSON.filter((item) => item.name === selectedProduct)
+    const finalProducts = Object.keys(factoryData[factory].products[product].output)
+    const finalProductSellingData = sellingPriceDataJSON.filter((item) => finalProducts.includes(item.name))
+    console.log(finalProductSellingData)
     const sales = Math.round(finalProductSellingData[0].maxPrice * finalProductionVol[0][2] / 1000 * multiplier);
     const cost = factoryData[factory].products[product].costPerMonth * 12;
     const fProductFinancials: ProductFinancials = {
@@ -546,7 +550,7 @@ const ReverseProduction = () => {
           <GraphBarWrapper $num={1} $marginBottom={"1.5em"}>
             <h5>素材合計売値</h5>
             <GraphBar 
-              $width={materialProfitSum/finalProductFinancials.yearlyProfit*100}>
+              $width={Math.min(materialProfitSum/finalProductFinancials.yearlyProfit*100, 100)}>
             </GraphBar>
             <p>&euro;{materialProfitSum.toLocaleString()}</p>
           </GraphBarWrapper>
@@ -560,7 +564,9 @@ const ReverseProduction = () => {
           </TransitionWrapper>
           <GraphBarWrapper $num={3}>
             <h5>最終生産品売値</h5>
-            <GraphBar $width={100}></GraphBar>
+            <GraphBar
+              $width={Math.min(finalProductFinancials.yearlyProfit/materialProfitSum*100, 100)}>
+            </GraphBar>
             <p>&euro;{finalProductFinancials.yearlyProfit.toLocaleString()}</p>
           </GraphBarWrapper>
         </CompareWrapper>
