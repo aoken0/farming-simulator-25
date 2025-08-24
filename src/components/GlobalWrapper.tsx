@@ -33,7 +33,7 @@ const GlobalWrapper: React.FC<Props> = ({children}) => {
           {/* <h4>シミュレーター</h4>
           <p><Link href="/production-planner">生産計画ツール</Link></p> */}
           <h4>生産</h4>
-          <p><Link href="/recipe-viewer">材料検索</Link></p>
+          <p><Link href="/recipe-viewer">材料・工程</Link></p>
           <h4>作物・生産物</h4>
           <p><Link href="/selling-price">売値</Link></p>
         </SideCotent>

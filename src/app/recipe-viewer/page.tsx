@@ -31,7 +31,7 @@ import ContentUL from '@/components/ContentUL';
 
 const productAliasMap: ProductAlias = productAliasJSON;
 
-const ReverseProduction = () => {
+const RecipeViewer = () => {
   const [showTable, setShowTable] = useState<boolean>(false);
   const [sellingPriceData, setSellingPriceData] = useState<SellingPrice[]>([]);
   const [searchType, setSearchType] = useState<string>("search-by-product");
@@ -330,7 +330,7 @@ const ReverseProduction = () => {
 
   return (
     <GlobalWrapper>
-      <ContentTitle>材料検索</ContentTitle>
+      <ContentTitle>材料・工程検索</ContentTitle>
       <ContentParagraph>
         <ContentP>
           生産品と施設を選択することで、必要な素材量や利益がわかります。<br />
@@ -614,7 +614,7 @@ const ReverseProduction = () => {
   )
 }
 
-export default ReverseProduction
+export default RecipeViewer
 
 const TableCategoryTitle = styled.h3`
   font-size: 0.6em;
