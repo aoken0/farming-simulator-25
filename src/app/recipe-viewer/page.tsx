@@ -87,6 +87,7 @@ const RecipeViewer = () => {
         setFactoryChoices(sortedProductData[paramProductName].factory)
       }
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
 
   useEffect(() => {
