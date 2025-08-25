@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.85.5",
     "framer-motion": "^12.23.6",
     "next": "15.3.5",
     "react": "^19.0.0",

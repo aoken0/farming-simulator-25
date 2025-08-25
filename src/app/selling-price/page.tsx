@@ -103,7 +103,7 @@ const Table = styled.table`
   border-collapse:separate;
   border-spacing: 0;
   tr {
-    line-height: 1.2em;
+    line-height: 2.5;
     background-color: #fff;
     &:nth-child(odd) {
       background-color: #f0f0f0;

@@ -30,4 +30,5 @@
 yarn add styled-components
 yarn add framer-motion
 yarn add -D typescript @types/node ts-node
+yarn add @tanstack/react-query
 ```
