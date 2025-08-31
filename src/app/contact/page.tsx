@@ -1,66 +1,15 @@
-"use client";
+import { Metadata } from "next";
+import Contact from "./Contact";
 
-import styled from "styled-components";
-import { useState, useRef } from "react";
-import ContentP from "@/components/ContentP";
-import ContentParagraph from "@/components/ContentParagraph";
-import ContentTitle from "@/components/ContentTitle";
-import GlobalWrapper from "@/components/GlobalWrapper";
-import Small from "@/components/Small";
+export const metadata: Metadata = {
+  title: "FS25 | お問い合わせ",
+  description: "当サイト (Farming Simulator 25 Lab) やそれに関連するお問い合わせはこちらからお願いいたします。",
+}
 
-const Contact = () => {
-  const emailRef = useRef<HTMLParagraphElement | null>(null);
-  const [imgUrl, setImgUrl] = useState<string>("/img/copy.png");
-
-  const handleCopy = async () => {
-    if (!emailRef.current) return;
-    if (!emailRef.current.textContent) return;
-    const email: string = emailRef.current.textContent;
-    try {
-      await navigator.clipboard.writeText(email);
-      setImgUrl("/img/check_mark.svg");
-    } catch {
-      return;
-    }
-  }
-
+const Page = () => {
   return (
-    <GlobalWrapper $currentPage="お問い合わせ">
-      <ContentTitle>メール</ContentTitle>
-      <ContentParagraph>
-        <ContentP>
-          このサイトについてのお問い合わせやその他何かありましたら、下記のメールアドレスにご連絡お願いいたします。
-        </ContentP>
-        <Small>※クリックでコピーできます。</Small>
-        <EmailWrapper>
-          <p ref={emailRef} onClick={handleCopy}>aoken.contact@gmail.com</p>
-          <CopyImg onClick={handleCopy} src={imgUrl} alt="copy" />
-        </EmailWrapper>
-      </ContentParagraph>
-    </GlobalWrapper>
+    <Contact />
   )
 }
 
-export default Contact
-
-const EmailWrapper = styled.div`
-  width: 100%;
-  background-color: #eee;
-  padding: 1em;
-  border-radius: 3px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-
-  p {
-    width: fit-content;
-    overflow-wrap: break-word;
-    cursor: pointer;
-  }
-`
-const CopyImg = styled.img`
-  width: 24px;
-  height: auto;
-  cursor: pointer;
-`
+export default Page
