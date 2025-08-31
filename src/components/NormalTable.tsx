@@ -1,4 +1,3 @@
-import { COLOR } from "@/utils/color";
 import styled from "styled-components"
 
 type Props = {
