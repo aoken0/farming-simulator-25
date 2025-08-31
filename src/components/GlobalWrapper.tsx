@@ -36,6 +36,8 @@ const GlobalWrapper: React.FC<Props> = ({children, $currentPage}) => {
           <h5>ツール</h5>
           <p><Link href={PATH["product-search"]}>生産品検索</Link></p>
           <p><Link href={PATH["recipe"]}>材料・工程検索</Link></p>
+          <h5>データ</h5>
+          <p><Link href={PATH["selling-price"]}>売値</Link></p>
           <h5>その他</h5>
           <p><Link href={PATH["selling-price"]}>売値</Link></p>
         </SideCotent>
@@ -46,9 +48,9 @@ const GlobalWrapper: React.FC<Props> = ({children, $currentPage}) => {
             <h5>ツール</h5>
             <li><Link href={PATH["product-search"]}>生産品検索</Link></li>
             <li><Link href={PATH["recipe"]}>材料・工程検索</Link></li>
+            <h5>データ</h5>
+            <li><Link href={PATH["selling-price"]}>売値</Link></li>
             <h5>その他</h5>
-            <li><Link href={PATH["selling-price"]}>売値</Link></li>
-            <li><Link href={PATH["selling-price"]}>売値</Link></li>
           </ul>
         </NavWrapper>
         :
