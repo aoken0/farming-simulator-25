@@ -30,10 +30,11 @@ import ProductMaterialSummaryTable from '@/components/ProductMaterialSummaryTabl
 import ContentUL from '@/components/ContentUL';
 import ContentSubTitle from '@/components/ContentSubTitle';
 import { useSearchParams } from 'next/navigation';
+import { Suspense } from 'react'
 
 const productAliasMap: ProductAlias = productAliasJSON;
 
-const RecipeViewer = () => {
+const Recipe = () => {
   const [showTable, setShowTable] = useState<boolean>(false);
   const [sellingPriceData, setSellingPriceData] = useState<SellingPrice[]>([]);
   const [searchType, setSearchType] = useState<string>("search-by-product");
@@ -626,6 +627,14 @@ const RecipeViewer = () => {
       </>
       }
     </GlobalWrapper>
+  )
+}
+
+const RecipeViewer = () => {
+  return (
+    <Suspense>
+      <Recipe />
+    </Suspense>
   )
 }
 

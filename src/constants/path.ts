@@ -3,4 +3,5 @@ export const PATH = {
   "product-search": "/product-search",
   "production-planner": "/production-planner",
   "selling-price": "/selling-price",
+  "contact": "/contact",
 }
