@@ -14,6 +14,7 @@ const Contact = () => {
 
   const handleCopy = async () => {
     if (!emailRef.current) return;
+    if (!emailRef.current.textContent) return;
     const email: string = emailRef.current.textContent;
     try {
       await navigator.clipboard.writeText(email);
