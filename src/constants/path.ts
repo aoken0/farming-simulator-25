@@ -1,7 +1,7 @@
 export const PATH = {
-  "recipe": "/recipe",
+  "contact": "/contact",
   "product-search": "/product-search",
   "production-planner": "/production-planner",
+  "recipe": "/recipe",
   "selling-price": "/selling-price",
-  "contact": "/contact",
 }

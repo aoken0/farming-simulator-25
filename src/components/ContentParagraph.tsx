@@ -21,4 +21,5 @@ const Wrapper = styled.div`
   padding-right: 1em;
   margin-top: 1em;
   margin-bottom: 1em;
+  letter-spacing: 1px;
 `

@@ -20,6 +20,7 @@ export default ContentTitle
 const Wrapper = styled.div<{$marginTop?: string, $marginBottom?: string}>`
   width: 100%;
   background-color: #e5e5e5;
+  border-radius: 2px;
   margin-top: ${({$marginTop}) => $marginTop ? $marginTop : "0"};
   margin-bottom: ${({$marginBottom}) => $marginBottom ? $marginBottom : "0"};
 `
