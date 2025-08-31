@@ -46,3 +46,6 @@ export type Factory = {
 export type ProductAlias = {
   [productType: string]: string,
 }
+export type MaterialProductMap = {
+  [materialName: string]: string[]
+}

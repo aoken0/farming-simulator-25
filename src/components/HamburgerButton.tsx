@@ -1,9 +1,9 @@
 import styled from "styled-components"
 import { SetStateAction } from "react"
 import { motion } from "framer-motion"
-import { BREAKPOINTS } from "@/constants/breakpoint"
+import { BREAKPOINT } from "@/constants/breakpoint"
 
-const BREAKPOINT_S = BREAKPOINTS.S
+const BREAKPOINT_S = BREAKPOINT.S
 
 type Props = {
   isOpen: boolean;

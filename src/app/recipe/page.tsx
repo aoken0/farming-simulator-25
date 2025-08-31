@@ -28,10 +28,12 @@ import ProductProfitTable from '@/components/ProductProfitTable';
 import ProductMaterialSummaryWrapper from '@/components/ProductMaterialSummaryWrapper';
 import ProductMaterialSummaryTable from '@/components/ProductMaterialSummaryTable';
 import ContentUL from '@/components/ContentUL';
+import ContentSubTitle from '@/components/ContentSubTitle';
+import { useSearchParams } from 'next/navigation';
 
 const productAliasMap: ProductAlias = productAliasJSON;
 
-const ReverseProduction = () => {
+const RecipeViewer = () => {
   const [showTable, setShowTable] = useState<boolean>(false);
   const [sellingPriceData, setSellingPriceData] = useState<SellingPrice[]>([]);
   const [searchType, setSearchType] = useState<string>("search-by-product");
@@ -53,6 +55,9 @@ const ReverseProduction = () => {
   const [materialProfitSum, setMaterialProfitSum] = useState<number>(0);
   const [multiplier, setMultiplier] = useState<number>(0.6);
   const [materialSummary, setMaterialSummary] = useState<MaterialSummary[]>([]);
+  const searchParams = useSearchParams();
+  const paramProductName = searchParams.get('productName');
+  const paramProductType = searchParams.get('productType');
 
   useEffect(() => {
     const sortedProductData = Object.fromEntries(
@@ -67,7 +72,22 @@ const ReverseProduction = () => {
     setProductData(sortedProductData);
     setProductChoices(sortedProductData);
     setFactoryData(sortedFactoryData);
-    // setFactoryChoices(Object.keys(sortedFactoryData))
+    if (paramProductName && paramProductType) {
+      if (Object.keys(sortedProductData).includes(paramProductName)) {
+        setSelectedProduct(paramProductName)
+        setProductType(sortedProductData[paramProductName].alias)
+        setSelectedProductType(paramProductType)
+        setFactoryChoices(sortedProductData[paramProductName].factory)
+      }
+      return
+    }
+    if (paramProductName && !paramProductType) {
+      if (Object.keys(sortedProductData).includes(paramProductName)) {
+        setSelectedProduct(paramProductName)
+        setFactoryChoices(sortedProductData[paramProductName].factory)
+      }
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
 
   useEffect(() => {
@@ -85,7 +105,8 @@ const ReverseProduction = () => {
     setFinalProductionVolume(finalProductionVol);
     setFinalConsumptionVolume(finalConsumptionVol);
     // 売上・コスト
-    const finalProductSellingData = sellingPriceDataJSON.filter((item) => item.name === selectedProduct)
+    const finalProducts = Object.keys(factoryData[factory].products[product].output)
+    const finalProductSellingData = sellingPriceDataJSON.filter((item) => finalProducts.includes(item.name))
     const sales = Math.round(finalProductSellingData[0].maxPrice * finalProductionVol[0][2] / 1000 * multiplier);
     const cost = factoryData[factory].products[product].costPerMonth * 12;
     const fProductFinancials: ProductFinancials = {
@@ -287,8 +308,6 @@ const ReverseProduction = () => {
     }
     setSearchType(searchType);
   }
-
-
   const handleChangeMiddleFactory = (i: number, newFactory: string) => {
     const updatedInfo = middleProductionInfo.map((item, j) => {
       if (j === i) {
@@ -325,8 +344,8 @@ const ReverseProduction = () => {
   }
 
   return (
-    <GlobalWrapper>
-      <ContentTitle>材料検索</ContentTitle>
+    <GlobalWrapper $currentPage='材料・工程'>
+      <ContentTitle>検索ツール</ContentTitle>
       <ContentParagraph>
         <ContentP>
           生産品と施設を選択することで、必要な素材量や利益がわかります。<br />
@@ -362,7 +381,7 @@ const ReverseProduction = () => {
         <MenuTableTr $label="生産品">
           <MenuTableTrSelect $name="product" $value={selectedProduct} $onChange={(e) => handleChangeProduct(e.target.value)}  $disabled={Object.entries(productChoices).length ? false : true}>
             <>
-              {Object.entries(productChoices).length ? <option value="">選択してください</option> : <option value="">---</option>}
+              {Object.entries(productChoices).length ? <option value="">-- 選択してください --</option> : <option value="">---</option>}
               {Object.entries(productChoices).map(([key, ], i) => (
                 <option key={`product-${i}`} value={key}>{key}</option>
               ))}
@@ -374,7 +393,7 @@ const ReverseProduction = () => {
         <MenuTableTr $label="種類">
           <MenuTableTrSelect $name="product-type" $value={selectedProductType} $onChange={(e) => handleChangeProductType(e.target.value)} $disabled={productType.length ? false : true}>
             <>
-              {productType.length ? <option value="">選択してください</option> : <option value="">---</option>}
+              {productType.length ? <option value="">-- 選択してください --</option> : <option value="">---</option>}
               {productType.map((e, i) => (
                 <option key={`product-type-${i}`} value={e}>{e}</option>
               ))}
@@ -386,7 +405,7 @@ const ReverseProduction = () => {
         <MenuTableTr $label="施設">
           <MenuTableTrSelect $name="factory" $value={selectedFactory} $onChange={(e) => handleChangeFactory(e.target.value)} $disabled={factoryChoices.length ? false : true}>
             <>
-              {factoryChoices.length ? <option value="">選択してください</option> : <option value="">---</option>}
+              {factoryChoices.length ? <option value="">-- 選択してください --</option> : <option value="">---</option>}
               {factoryChoices.map((e, i) => (
                 <option key={`factory-${i}`} value={e}>{e}</option>
               ))}
@@ -400,7 +419,7 @@ const ReverseProduction = () => {
         最終工程表示領域
       ================================== */}
       <Small>※ 量の単位はすべて&#08467; / 小数点以下切り上げ</Small>
-      <TableCategoryTitle>最終工程</TableCategoryTitle>
+      <ContentSubTitle>最終工程</ContentSubTitle>
       <ProductInfoWrapper $factoryName={selectedFactory}  $style={{marginBottom:"4em"}}>
         <ProductExportInfoTable>
           <tr>
@@ -431,7 +450,7 @@ const ReverseProduction = () => {
         中間工程表示領域
       ================================== */}
       {middleProductionInfo.length > 0 && 
-        <TableCategoryTitle>中間工程</TableCategoryTitle>
+        <ContentSubTitle>中間工程</ContentSubTitle>
       }
       {middleProduction.map((e, i) => (
         <ProductInfoWrapper key={`midProd-${i}`}
@@ -482,7 +501,7 @@ const ReverseProduction = () => {
         利益関連表示領域
       ================================== */}
       <Small>※ 金額の単位は、すべて&euro; / 小数点以下四捨五入</Small>
-      <TableCategoryTitle>利益</TableCategoryTitle>
+      <ContentSubTitle>利益</ContentSubTitle>
       {finalProductFinancials &&
       <ProductProfitWrapper $title='最終生産品' $style={{marginBottom:"1em"}}>
         <ProductProfitTable>
@@ -546,7 +565,7 @@ const ReverseProduction = () => {
           <GraphBarWrapper $num={1} $marginBottom={"1.5em"}>
             <h5>素材合計売値</h5>
             <GraphBar 
-              $width={materialProfitSum/finalProductFinancials.yearlyProfit*100}>
+              $width={Math.min(materialProfitSum/finalProductFinancials.yearlyProfit*100, 100)}>
             </GraphBar>
             <p>&euro;{materialProfitSum.toLocaleString()}</p>
           </GraphBarWrapper>
@@ -560,7 +579,9 @@ const ReverseProduction = () => {
           </TransitionWrapper>
           <GraphBarWrapper $num={3}>
             <h5>最終生産品売値</h5>
-            <GraphBar $width={100}></GraphBar>
+            <GraphBar
+              $width={Math.min(finalProductFinancials.yearlyProfit/materialProfitSum*100, 100)}>
+            </GraphBar>
             <p>&euro;{finalProductFinancials.yearlyProfit.toLocaleString()}</p>
           </GraphBarWrapper>
         </CompareWrapper>
@@ -571,7 +592,7 @@ const ReverseProduction = () => {
         まとめ
       ================================== */}
       <Small>※ 量の単位はすべて&#08467; / 小数点以下切り上げ</Small>
-      <TableCategoryTitle>まとめ</TableCategoryTitle>
+      <ContentSubTitle>まとめ</ContentSubTitle>
       <ProductMaterialSummaryWrapper $title='必要原材料一覧'>
         <ProductMaterialSummaryTable>
           {materialSummary.map((item, i) => (
@@ -608,27 +629,8 @@ const ReverseProduction = () => {
   )
 }
 
-export default ReverseProduction
+export default RecipeViewer
 
-const TableCategoryTitle = styled.h3`
-  font-size: 0.6em;
-  line-height: 2em;
-  padding-left: 0.5em;
-  margin-top: 0.5em;
-  margin-bottom: 0.2em;
-  position: relative;
-  &::before {
-    position: absolute;
-    content: "";
-    height: 1.6em;
-    aspect-ratio: 1/8;
-    background-color: #444;
-    top: 50%;
-    left: 0;
-    transform: translateY(-50%);
-    border-radius: 2px;
-  }
-`
 const RadioSelector = styled.form`
   width: 100%;
   display: flex;
