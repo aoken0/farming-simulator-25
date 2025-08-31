@@ -61,6 +61,7 @@ const GlobalWrapper: React.FC<Props> = ({children, $currentPage}) => {
         </MainContent>
         }
       </ContentWrapper>
+      <Copyright>&copy;2025 Ken Aono</Copyright>
     </Wrapper>
   )
 }
@@ -90,6 +91,7 @@ const Wrapper = styled.div`
   align-items: center;
   gap: 32px;
   font-size: 32px;
+  position: relative;
   @media screen and (max-width: ${BREAKPOINT.M}px) {
     width: 96%;
     font-size: 28px;
@@ -252,4 +254,11 @@ const MainContent = styled.div`
     border-bottom: 2px solid ${COLOR.main2};
     margin-bottom: .5em;
   }
+`
+
+const Copyright = styled.small`
+  font-size: 10px;
+  color: #aaa;
+  position: absolute;
+  bottom: 8px;
 `

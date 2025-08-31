@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./reset.css";
 import "./globals.css";
 import QueryProvider from "@/components/QueryProvider";
+import StyledComponentsRegistry from "@/lib/registry";
 
 export const metadata: Metadata = {
   title: "Farming Simulator 25 wiki",
@@ -17,7 +18,7 @@ export default function RootLayout({
     <html lang="ja">
       <body>
         <QueryProvider>
-          {children}
+          <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
         </QueryProvider>
       </body>
     </html>
