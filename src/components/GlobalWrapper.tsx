@@ -6,6 +6,7 @@ import { useState, useEffect } from "react"
 import { useWindowSize } from "@/utils/hooks/useWindowSize"
 import { BREAKPOINT } from "@/constants/breakpoint"
 import { COLOR } from "@/utils/color"
+import { PATH } from "@/constants/path"
 
 type Props = {
   children: React.ReactNode,
@@ -25,28 +26,29 @@ const GlobalWrapper: React.FC<Props> = ({children, $currentPage}) => {
   return (
     <Wrapper className={bizUDPGothic.className}>
       <Header>
+        <Link href="/"><LogoImg src="/img/cow.svg" alt="" /></Link>
         <h1><Link href="/">Farming Simulator 25 Lab</Link></h1>
         <HamburgerButton isOpen={isOpen} setIsOpen={setIsOpen} $style={hamburgerBtnStyle} />
       </Header>
       <ContentWrapper>
         <SideCotent>
           <h4>Menu</h4>
-          <h5>生産</h5>
-          <p><Link href="/production-search">生産品</Link></p>
-          <p><Link href="/recipe-viewer">材料・工程</Link></p>
+          <h5>ツール</h5>
+          <p><Link href={PATH["product-search"]}>生産品検索</Link></p>
+          <p><Link href={PATH["recipe"]}>材料・工程検索</Link></p>
           <h5>その他</h5>
-          <p><Link href="/selling-price">売値</Link></p>
+          <p><Link href={PATH["selling-price"]}>売値</Link></p>
         </SideCotent>
         {isOpen ?
         <NavWrapper>
           <ul>
             <h4>Menu</h4>
-            <h5>生産</h5>
-            <li><Link href="/production-search">生産品</Link></li>
-            <li><Link href="/recipe-viewer">材料・工程</Link></li>
+            <h5>ツール</h5>
+            <li><Link href={PATH["product-search"]}>生産品検索</Link></li>
+            <li><Link href={PATH["recipe"]}>材料・工程検索</Link></li>
             <h5>その他</h5>
-            <li><Link href="/selling-price">売値</Link></li>
-            <li><Link href="/selling-price">売値</Link></li>
+            <li><Link href={PATH["selling-price"]}>売値</Link></li>
+            <li><Link href={PATH["selling-price"]}>売値</Link></li>
           </ul>
         </NavWrapper>
         :
@@ -104,6 +106,11 @@ const Header = styled.header`
   padding: 0 1em;
   border-radius: .2em .2em 0 0;
   position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  align-items: center;
+  gap: .2em;
   @media screen and (max-width: ${BREAKPOINT.S}px) {
     padding: 0;
     border-radius: 0;
@@ -120,6 +127,10 @@ const Header = styled.header`
       padding-left: 16px;
     }
   }
+`
+const LogoImg = styled.img`
+  width: 1.6em;
+  height: auto;
 `
 const ContentWrapper = styled.div`
   width: 100%;
